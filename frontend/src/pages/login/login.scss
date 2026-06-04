@@ -1,0 +1,68 @@
+// 爻爻 — Login
+@import '../../app.scss';
+
+.login-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 24px 48px;
+}
+.login-body { width: 100%; max-width: 380px; }
+
+.login-brand {
+  text-align: center; margin-bottom: 40px;
+}
+.login-brand-name { font-size: 36px; font-weight: 800; color: var(--ink); letter-spacing: 8px; }
+
+// Tabs
+.login-tabs { display: flex; margin-bottom: 28px; }
+.login-tab {
+  flex: 1; text-align: center; padding: 12px 0;
+  font-size: 15px; color: var(--ink-dim);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.login-tab--on {
+  color: var(--ink); font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+
+// Fields
+.login-field { margin-bottom: 18px; }
+.login-label {
+  display: block; font-size: 13px; color: var(--ink-sec);
+  margin-bottom: 8px; font-weight: 500;
+}
+.login-inp {
+  width: 100%; height: 48px;
+  background: #f5f1ea; border: 1px solid transparent;
+  border-radius: var(--radius-sm); padding: 0 14px;
+  font-size: 15px; color: var(--ink);
+  transition: border-color 0.2s;
+  &:focus { border-color: var(--gold); background: #fff; }
+}
+.login-ph { color: var(--ink-dim); }
+
+// SMS row
+.sms-row { display: flex; gap: 10px; }
+.sms-inp { flex: 1; }
+.sms-btn {
+  flex-shrink: 0; height: 48px; padding: 0 16px;
+  background: #f5f1ea; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-sm); font-size: 13px;
+  color: var(--ink-sec); white-space: nowrap;
+  display: flex; align-items: center; justify-content: center;
+}
+.sms-btn--off { color: var(--ink-dim); opacity: 0.5; }
+
+// Submit
+.login-submit {
+  width: 100%; height: 50px;
+  background: var(--accent); border-radius: var(--radius-md);
+  font-size: 16px; font-weight: 600; color: #fff;
+  letter-spacing: 2px; display: flex;
+  align-items: center; justify-content: center;
+  margin-top: 24px;
+}
+.login-submit--off { opacity: 0.4; pointer-events: none; }
+
+.login-error { display: block; font-size: 13px; color: var(--accent); margin-top: 10px; text-align: center; }

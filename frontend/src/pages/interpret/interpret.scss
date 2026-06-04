@@ -1,0 +1,35 @@
+// 爻爻 — Interpret (warm mode)
+@import '../../app.scss';
+
+.interpret-header  { text-align: center; padding: 28px 0 10px; }
+.interpret-title   { display: block; font-size: 22px; font-weight: 600; color: var(--gold-text); letter-spacing: 2px; }
+.interpret-subtitle{ display: block; font-size: 13px; color: var(--ink-dim); margin-top: 8px; }
+
+// Loading
+.loading-section {
+  text-align: center; padding: 60px 0;
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-md); margin-top: 16px;
+}
+.loading-text { display: block; font-size: 15px; color: var(--gold-text); margin-top: 16px; }
+.loading-hint { display: block; font-size: 13px; color: var(--ink-dim); margin-top: 8px; }
+
+// Error
+.error-section { text-align: center; padding: 60px 0; }
+.error-text    { display: block; font-size: 15px; color: var(--accent); }
+
+// Content
+.interpret-content { margin-top: 12px; }
+
+.section-heading {
+  display: block; font-size: 16px; font-weight: 600; color: var(--ink);
+  margin-top: 28px; margin-bottom: 10px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--clean-border);
+}
+
+.bold-line { display: block; font-size: 15px; color: var(--ink); font-weight: 500; line-height: 1.9; }
+.text-line { display: block; font-size: 14px; color: var(--ink-sec); line-height: 1.9; margin: 2px 0; }
+
+// Actions
+.action-buttons { margin-top: 32px; }
+.btn-outline { text-align: center; margin-top: 12px; }

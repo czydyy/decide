@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爻爻 — 设计稿 v3</title>
+<style>
+/* ============================================================
+   爻爻 Design System v3
+   Two modes: Warm (Landing/Form/Paipan) + Clean (Chat/History/Profile)
+   ============================================================ */
+
+:root {
+  /* --- Warm palette --- */
+  --warm-start:  #ec5930;
+  --warm-mid:    #dea749;
+  --warm-end:    #f6bc4f;
+  --gold:        #d4a030;
+  --gold-soft:   rgba(212,160,48,0.15);
+  --gold-text:   #b8891e;
+  --accent:      #ec5930;
+  --accent-hov:  #d1441e;
+
+  /* --- Clean palette --- */
+  --clean-bg:    #faf8f3;
+  --clean-card:  #ffffff;
+  --clean-border:#ebe5d8;
+  --ink:         #1a1410;
+  --ink-sec:     #6b6058;
+  --ink-dim:     #a09888;
+
+  /* --- Shared --- */
+  --color-a:     #5b7fc7;
+  --color-b:     #d4785c;
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-full: 9999px;
+  --form-max:    480px;
+  --chat-max:    680px;
+  --font:        -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  background: var(--clean-bg);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
+
+/* ============================================================
+   WARM BACKGROUND — shared by Landing / Form / Paipan
+   ============================================================ */
+.warm-bg {
+  background: linear-gradient(170deg, #ec5930 0%, #dea749 40%, #f6bc4f 100%);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   CLEAN BACKGROUND — shared by Chat / History / Profile
+   ============================================================ */
+.clean-bg {
+  background: var(--clean-bg);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   SECTION DIVIDER
+   ============================================================ */
+.sec-div {
+  text-align: center; padding: 28px 0;
+  font-size: 13px; color: #c0b8a8; letter-spacing: 4px;
+  background: #f5f1e9;
+}
+.sec-div-dark {
+  text-align: center; padding: 28px 0;
+  font-size: 13px; color: rgba(26,20,16,0.3); letter-spacing: 4px;
+}
+
+/* ============================================================
+   1. LANDING PAGE — warm bg, centered showcase, NO chat input
+   ============================================================ */
+.landing {
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh; padding: 0 24px;
+}
+
+.landing-nav {
+  width: 100%; max-width: 680px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28px 0 0;
+}
+.landing-nav-logo { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: 4px; }
+.landing-nav-link { font-size: 14px; color: var(--ink-dim); background: none; border: none; cursor: pointer; font-family: var(--font); }
+
+.landing-hero {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 60px 0 80px;
+}
+
+.landing-icon {
+  width: 88px; height: 88px; border-radius: 24px;
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 46px; color: var(--ink); margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+
+.landing-brand {
+  font-size: 56px; font-weight: 800; color: var(--ink);
+  letter-spacing: 12px;
+}
+
+.landing-tagline {
+  display: block; margin-top: 12px;
+  font-size: 17px; color: rgba(26,20,16,0.45);
+  letter-spacing: 3px;
+}
+
+.landing-chips {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-top: 44px;
+  max-width: 460px;
+}
+
+.landing-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 22px;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: var(--radius-full);
+  font-size: 13px; color: rgba(26,20,16,0.65);
+  cursor: pointer; transition: all 0.2s;
+  font-family: var(--font);
+  backdrop-filter: blur(4px);
+}
+.landing-chip:hover {
+  background: rgba(255,255,255,0.42);
+  color: var(--ink);
+  border-color: rgba(255,255,255,0.35);
+}
+.landing-chip-icon { font-size: 15px; }
+
+.landing-cta {
+  margin-top: 44px;
+  display: flex; align-items: center; justify-content: center;
+  width: 200px; height: 52px;
+  background: var(--accent);
+  border: none; border-radius: var(--radius-full);
+  font-size: 17px; font-weight: 600; color: #fff;
+  letter-spacing: 3px; cursor: pointer;
+  font-family: var(--font);
+  box-shadow: 0 6px 24px rgba(236,89,48,0.3);
+  transition: all 0.2s;
+}
+.landing-cta:hover { background: var(--accent-hov); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(236,89,48,0.4); }
+
+.landing-footer {
+  font-size: 12px; color: rgba(26,20,16,0.3);
+  padding-bottom: 28px; letter-spacing: 1px;
+}
+
+/* ============================================================
+   2. FORM PAGE — warm bg + dark cards
+   ============================================================ */
+.form-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+
+.form-top {
+  width: 100%; max-width: var(--form-max);
+  display: flex; align-items: center; margin-bottom: 32px;
+  gap: 12px;
+}
+.form-back {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(26,20,16,0.08); border: none;
+  font-size: 15px; color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: var(--font);
+}
+.form-page-title {
+  font-size: 19px; font-weight: 700; color: var(--ink);
+  letter-spacing: 2px;
+}
+
+.form-body { width: 100%; max-width: var(--form-max); }
+
+/* Dark card (warm mode) */
+.dark-card {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+.dark-card-label {
+  font-size: 11px; color: var(--gold-text);
+  letter-spacing: 2px; font-weight: 600;
+  display: block; margin-bottom: 14px;
+  opacity: 0.85;
+}
+
+/* Question textarea */
+.q-textarea {
+  width: 100%; min-height: 108px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-sm);
+  padding: 16px; font-size: 16px; color: #f0ebe0;
+  line-height: 1.7; font-family: var(--font); resize: none; outline: none;
+}
+.q-textarea:focus { border-color: var(--gold); }
+.q-textarea::placeholder { color: rgba(240,235,224,0.3); }
+.q-count { display: block; text-align: right; font-size: 11px; color: rgba(240,235,224,0.3); margin-top: 6px; }
+
+/* A/B options */
+.opts-row { display: flex; gap: 0; align-items: stretch; }
+
+.opt-card {
+  flex: 1;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+}
+.opt-card--a { border-left: 3px solid var(--color-a); }
+.opt-card--b { border-left: 3px solid var(--color-b); }
+
+.opt-badge {
+  display: inline-block; width: 28px; height: 28px; border-radius: 50%;
+  font-size: 13px; font-weight: 700; line-height: 28px; text-align: center;
+  margin-bottom: 10px;
+}
+.opt-badge--a { background: rgba(91,127,199,0.2); color: var(--color-a); }
+.opt-badge--b { background: rgba(212,120,92,0.2); color: var(--color-b); }
+
+.opt-inp {
+  width: 100%; height: 34px; background: transparent; border: none;
+  font-size: 16px; color: #f0ebe0; outline: none; font-family: var(--font);
+}
+.opt-inp::placeholder { color: rgba(240,235,224,0.25); }
+
+.opt-vs {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 0 14px; min-width: 40px;
+}
+.opt-vs-line {
+  width: 1px; flex: 1; min-height: 14px;
+  background: rgba(255,255,255,0.1);
+}
+.opt-vs-txt {
+  font-size: 10px; color: rgba(240,235,224,0.3);
+  letter-spacing: 2px; font-weight: 700; padding: 6px 0;
+}
+
+/* Method tabs */
+.tabs { display: flex; gap: 10px; }
+.tab {
+  flex: 1; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-sm);
+  font-size: 15px; color: rgba(240,235,224,0.45);
+  cursor: pointer; transition: all 0.2s; font-family: var(--font);
+}
+.tab:hover { border-color: rgba(240,192,80,0.25); }
+.tab--on {
+  background: rgba(240,192,80,0.12);
+  border-color: var(--gold);
+  color: var(--gold); font-weight: 600;
+}
+
+/* Number inputs (shown when 数字 tab active) */
+.nums-row { display: flex; gap: 12px; margin-top: 14px; }
+.num-cell { flex: 1; text-align: center; }
+.num-lbl {
+  display: block; font-size: 12px; color: rgba(240,235,224,0.4);
+  letter-spacing: 1px; margin-bottom: 8px;
+}
+.num-inp {
+  width: 100%; height: 52px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-sm);
+  font-size: 22px; font-weight: 600; color: #f0ebe0;
+  text-align: center; outline: none; font-family: var(--font);
+}
+.num-inp:focus { border-color: var(--gold); }
+
+/* Form CTA */
+.form-cta {
+  width: 100%; max-width: var(--form-max); height: 54px;
+  background: var(--accent); border: none;
+  border-radius: var(--radius-md);
+  font-size: 17px; font-weight: 700; color: #fff;
+  letter-spacing: 4px; cursor: pointer; font-family: var(--font);
+  box-shadow: 0 6px 24px rgba(236,89,48,0.3);
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+.form-cta:hover { background: var(--accent-hov); }
+
+/* ============================================================
+   3. PAIPAN PAGE — warm bg
+   ============================================================ */
+.paipan-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+
+.paipan-top {
+  width: 100%; max-width: var(--form-max);
+  display: flex; align-items: center; margin-bottom: 24px;
+  gap: 12px;
+}
+
+.paipan-body { width: 100%; max-width: var(--form-max); }
+
+.q-banner {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 20px 22px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+.q-banner-lbl { font-size: 11px; color: rgba(240,235,224,0.35); letter-spacing: 2px; display: block; margin-bottom: 6px; }
+.q-banner-txt { font-size: 16px; color: #f0ebe0; font-weight: 500; line-height: 1.6; }
+.q-banner-opts { display: flex; align-items: center; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
+.q-opt { flex: 1; font-size: 14px; font-weight: 500; text-align: center; }
+.q-opt-a { color: var(--color-a); }
+.q-opt-b { color: var(--color-b); }
+.q-opt-div { font-size: 12px; color: rgba(240,235,224,0.25); }
+
+.gua-hero {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+  text-align: center;
+}
+.gua-symbol { font-size: 64px; display: block; margin-bottom: 12px; filter: drop-shadow(0 2px 8px rgba(240,192,80,0.2)); }
+.gua-name   { font-size: 24px; font-weight: 700; color: #f0ebe0; display: block; }
+.gua-sub    { font-size: 13px; color: rgba(240,235,224,0.4); margin-top: 4px; display: block; }
+.gua-ci     { font-size: 14px; color: rgba(240,235,224,0.55); line-height: 1.8; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+/* Yao table */
+.yao-card {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 20px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+
+.yao-row {
+  display: flex; align-items: center; padding: 9px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.yao-row:last-child { border-bottom: none; }
+.yao-hdr { border-bottom: 1px solid rgba(240,192,80,0.3) !important; padding-bottom: 10px; margin-bottom: 4px; }
+.yao-row.chg { background: rgba(240,192,80,0.06); border-radius: var(--radius-sm); }
+.yao-col { font-size: 13px; color: rgba(240,235,224,0.8); text-align: center; }
+.yao-hdr .yao-col { font-size: 11px; color: rgba(240,235,224,0.35); font-weight: 600; letter-spacing: 1px; }
+.col-pos{width:12%}.col-sym{width:16%}.col-nj{width:18%}.col-lq{width:18%}.col-ls{width:18%}.col-sy{width:18%}
+.shi{color:#5bcc8f;font-weight:600}.ying{color:#f0b040;font-weight:600}
+
+/* Transform grid */
+.tf-grid { display: flex; gap: 10px; }
+.tf-item {
+  flex: 1; text-align: center;
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-md); padding: 20px 8px;
+  backdrop-filter: blur(14px);
+}
+.tf-lbl { font-size: 11px; color: rgba(240,235,224,0.35); letter-spacing: 1px; display: block; }
+.tf-sym { font-size: 36px; display: block; margin: 8px 0; }
+.tf-nm  { font-size: 15px; color: #f0ebe0; font-weight: 500; display: block; }
+
+.paipan-to-chat {
+  width: 100%; max-width: var(--form-max); height: 50px;
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 500; color: #f0ebe0;
+  letter-spacing: 2px; cursor: pointer; font-family: var(--font);
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.paipan-to-chat:hover { background: rgba(255,255,255,0.06); }
+
+/* ============================================================
+   4. CHAT PAGE — CLEAN / LIGHT mode
+   ============================================================ */
+.chat-page {
+  display: flex; flex-direction: column; height: 100vh;
+  background: var(--clean-bg);
+}
+
+.chat-header {
+  padding: 16px 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--clean-border);
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+}
+.chat-hdr-back {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #f5f1ea; border: none;
+  font-size: 14px; color: var(--ink-sec);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: var(--font);
+}
+.chat-hdr-info { flex: 1; }
+.chat-hdr-title    { font-size: 15px; font-weight: 600; color: var(--ink); display: block; }
+.chat-hdr-subtitle { font-size: 12px; color: var(--ink-dim); display: block; margin-top: 1px; }
+
+.chat-msgs {
+  flex: 1; overflow-y: auto; padding: 24px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.chat-msgs-inner { width: 100%; max-width: var(--chat-max); }
+
+.msg-row { display: flex; margin-bottom: 20px; }
+.msg-row.user      { justify-content: flex-end; }
+.msg-row.assistant { justify-content: flex-start; }
+
+.msg-bubble {
+  max-width: 75%; padding: 14px 18px;
+  border-radius: var(--radius-md); font-size: 15px;
+  line-height: 1.75; color: var(--ink);
+}
+.msg-bubble.user {
+  background: #f0e6d2;
+  border: 1px solid #e5d8bb;
+  border-bottom-right-radius: 4px;
+}
+.msg-bubble.assistant {
+  background: #fff;
+  border: 1px solid var(--clean-border);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.chat-input-wrap {
+  padding: 12px 24px 20px;
+  background: #fff;
+  border-top: 1px solid var(--clean-border);
+  flex-shrink: 0;
+  display: flex; justify-content: center;
+}
+.chat-input-row {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; max-width: var(--chat-max);
+}
+.chat-input {
+  flex: 1; height: 44px;
+  background: #f5f1ea; border: 1px solid transparent;
+  border-radius: var(--radius-full); padding: 0 20px;
+  font-size: 15px; color: var(--ink); outline: none; font-family: var(--font);
+  transition: border-color 0.2s;
+}
+.chat-input::placeholder { color: var(--ink-dim); }
+.chat-input:focus { border-color: var(--gold); background: #fff; }
+
+.chat-send {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #f5f1ea; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--ink-dim); flex-shrink: 0;
+  cursor: pointer; transition: all 0.2s; font-family: var(--font);
+}
+.chat-send.active { background: var(--accent); color: #fff; }
+
+/* ============================================================
+   5. HISTORY PAGE — clean mode
+   ============================================================ */
+.hist-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+.hist-body { width: 100%; max-width: var(--chat-max); }
+
+.hist-hdr { margin-bottom: 28px; }
+.hist-title { font-size: 28px; font-weight: 800; color: var(--ink); letter-spacing: 2px; }
+.hist-desc  { font-size: 14px; color: var(--ink-dim); margin-top: 6px; display: block; }
+
+.hist-empty { text-align: center; padding: 80px 0; }
+.hist-empty-icon { font-size: 52px; display: block; margin-bottom: 16px; }
+.hist-empty-txt  { font-size: 17px; color: var(--ink); display: block; }
+.hist-empty-hint { font-size: 14px; color: var(--ink-dim); margin-top: 6px; display: block; }
+
+.hist-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 22px; margin-bottom: 12px;
+  transition: box-shadow 0.2s;
+}
+.hist-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+
+.hist-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.hist-badge { font-size: 11px; color: var(--gold-text); background: rgba(212,160,48,0.08); padding: 3px 12px; border-radius: var(--radius-full); font-weight: 500; }
+.hist-time  { font-size: 12px; color: var(--ink-dim); }
+
+.hist-gua      { font-size: 17px; font-weight: 700; color: var(--ink); display: block; }
+.hist-question { font-size: 15px; color: var(--ink-sec); margin-top: 5px; display: block; }
+.hist-preview  { font-size: 13px; color: var(--ink-dim); margin-top: 8px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.hist-card-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--clean-border); }
+.hist-dyn { font-size: 12px; color: var(--ink-dim); }
+.hist-del { font-size: 13px; color: #c85b40; cursor: pointer; background: none; border: none; font-family: var(--font); }
+
+/* ============================================================
+   6. PROFILE PAGE — clean mode
+   ============================================================ */
+.prof-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+.prof-body { width: 100%; max-width: 420px; }
+
+.prof-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 36px 24px 28px;
+  text-align: center;
+}
+
+.prof-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #ec5930, #dea749);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 20px rgba(236,89,48,0.2);
+}
+.prof-av-txt { font-size: 36px; color: #fff; font-weight: 700; }
+
+.prof-name { font-size: 20px; font-weight: 700; color: var(--ink); display: block; }
+.prof-id   { font-size: 12px; color: var(--ink-dim); margin-top: 4px; display: block; }
+
+.prof-stats { display: flex; gap: 8px; margin-top: 24px; }
+.prof-stat {
+  flex: 1; text-align: center; padding: 18px 6px;
+  background: #faf7f2; border-radius: var(--radius-sm);
+}
+.prof-stat-n { font-size: 28px; font-weight: 800; color: var(--gold-text); display: block; }
+.prof-stat-l { font-size: 11px; color: var(--ink-dim); margin-top: 4px; letter-spacing: 1px; display: block; }
+
+.prof-menu { margin-top: 14px; }
+.prof-menu-item {
+  display: flex; align-items: center; padding: 16px 20px;
+  background: #fff; border-bottom: 1px solid var(--clean-border);
+  cursor: pointer; transition: background 0.15s;
+}
+.prof-menu-item:hover { background: #faf8f4; }
+.prof-menu-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.prof-menu-item:last-child  { border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-bottom: none; }
+.prof-mi { font-size: 18px; margin-right: 14px; }
+.prof-ml { font-size: 15px; color: var(--ink); flex: 1; }
+.prof-ma { font-size: 15px; color: var(--ink-dim); }
+
+.prof-footer { text-align: center; margin-top: 32px; font-size: 12px; color: var(--ink-dim); letter-spacing: 2px; }
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.section-title {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--gold-text); letter-spacing: 2px;
+  margin-bottom: 12px; opacity: 0.85;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     1. LANDING — no chat input, just CTA
+     ============================================================ -->
+<div class="warm-bg">
+<div class="landing">
+
+  <div class="landing-nav">
+    <span class="landing-nav-logo">爻爻</span>
+    <button class="landing-nav-link">历史记录 →</button>
+  </div>
+
+  <div class="landing-hero">
+    <div class="landing-icon">☯</div>
+    <h1 class="landing-brand">爻爻</h1>
+    <span class="landing-tagline">两难之间，以卦明辨</span>
+
+    <div class="landing-chips">
+      <button class="landing-chip">
+        <span class="landing-chip-icon">☯</span> 我该不该换工作？
+      </button>
+      <button class="landing-chip">
+        <span class="landing-chip-icon">☯</span> 要不要买这套房子？
+      </button>
+      <button class="landing-chip">
+        <span class="landing-chip-icon">☯</span> 这个时机创业合适吗？
+      </button>
+      <button class="landing-chip">
+        <span class="landing-chip-icon">☯</span> 这次投资能成功吗？
+      </button>
+    </div>
+
+    <button class="landing-cta">开始起卦</button>
+  </div>
+
+  <div class="landing-footer">以千年智慧，解今日困惑</div>
+
+</div>
+</div>
+
+<div class="sec-div-dark">—— 起卦表单 ——</div>
+
+<!-- ============================================================
+     2. FORM
+     ============================================================ -->
+<div class="warm-bg">
+<div class="form-page">
+
+  <div class="form-top">
+    <button class="form-back">←</button>
+    <span class="form-page-title">起卦解惑</span>
+  </div>
+
+  <div class="form-body">
+
+    <div class="dark-card">
+      <span class="dark-card-label">你的困惑</span>
+      <textarea class="q-textarea" placeholder="写下你正在纠结的事情……">我该不该换工作？</textarea>
+      <span class="q-count">14/200</span>
+    </div>
+
+    <div class="dark-card">
+      <span class="dark-card-label">起卦方式</span>
+      <div class="tabs">
+        <div class="tab tab--on">铜钱起卦</div>
+        <div class="tab">数字起卦</div>
+        <div class="tab">时间起卦</div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="form-cta">起卦解惑</button>
+
+</div>
+</div>
+
+<div class="sec-div-dark">—— 排盘页 ——</div>
+
+<!-- ============================================================
+     3. PAIPAN
+     ============================================================ -->
+<div class="warm-bg">
+<div class="paipan-page">
+
+  <div class="paipan-top">
+    <button class="form-back">←</button>
+    <span class="form-page-title">卦象结果</span>
+  </div>
+
+  <div class="paipan-body">
+
+    <div class="q-banner">
+      <span class="q-banner-lbl">占问</span>
+      <span class="q-banner-txt">我该不该换工作？</span>
+    </div>
+
+    <div class="gua-hero">
+      <span class="gua-symbol">䷀</span>
+      <span class="gua-name">乾为天</span>
+      <span class="gua-sub">乾宫 · 八纯卦</span>
+      <p class="gua-ci">元亨利贞。初九：潜龙勿用。九二：见龙在田，利见大人。九三：君子终日乾乾，夕惕若厉，无咎。</p>
+    </div>
+
+    <div class="yao-card">
+      <span class="section-title" style="color:rgba(240,192,80,0.7)">爻象推演</span>
+      <div class="yao-row yao-hdr">
+        <span class="yao-col col-pos">位</span>
+        <span class="yao-col col-sym">爻</span>
+        <span class="yao-col col-nj">纳甲</span>
+        <span class="yao-col col-lq">六亲</span>
+        <span class="yao-col col-ls">六兽</span>
+        <span class="yao-col col-sy">世应</span>
+      </div>
+      <div class="yao-row"><span class="yao-col col-pos">6</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">壬戌</span><span class="yao-col col-lq">父母</span><span class="yao-col col-ls">青龙</span><span class="yao-col col-sy shi">世</span></div>
+      <div class="yao-row"><span class="yao-col col-pos">5</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">壬申</span><span class="yao-col col-lq">兄弟</span><span class="yao-col col-ls">朱雀</span><span class="yao-col col-sy"></span></div>
+      <div class="yao-row"><span class="yao-col col-pos">4</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">壬午</span><span class="yao-col col-lq">官鬼</span><span class="yao-col col-ls">勾陈</span><span class="yao-col col-sy"></span></div>
+      <div class="yao-row chg"><span class="yao-col col-pos">3</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">甲辰</span><span class="yao-col col-lq">父母</span><span class="yao-col col-ls">螣蛇</span><span class="yao-col col-sy ying">应</span></div>
+      <div class="yao-row"><span class="yao-col col-pos">2</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">甲寅</span><span class="yao-col col-lq">妻财</span><span class="yao-col col-ls">白虎</span><span class="yao-col col-sy"></span></div>
+      <div class="yao-row"><span class="yao-col col-pos">1</span><span class="yao-col col-sym">—</span><span class="yao-col col-nj">甲子</span><span class="yao-col col-lq">子孙</span><span class="yao-col col-ls">玄武</span><span class="yao-col col-sy"></span></div>
+    </div>
+
+    <div class="tf-grid">
+      <div class="tf-item"><span class="tf-lbl">互卦</span><span class="tf-sym">䷪</span><span class="tf-nm">夬</span></div>
+      <div class="tf-item"><span class="tf-lbl">变卦</span><span class="tf-sym">䷫</span><span class="tf-nm">姤</span></div>
+      <div class="tf-item"><span class="tf-lbl">综卦</span><span class="tf-sym">䷀</span><span class="tf-nm">乾</span></div>
+    </div>
+
+  </div>
+
+  <button class="paipan-to-chat">查看 AI 解读 →</button>
+
+</div>
+</div>
+
+<div class="sec-div">—— 对话页（浅色模式）——</div>
+
+<!-- ============================================================
+     4. CHAT — CLEAN / LIGHT
+     ============================================================ -->
+<div class="chat-page">
+
+  <div class="chat-header">
+    <button class="chat-hdr-back">←</button>
+    <div class="chat-hdr-info">
+      <span class="chat-hdr-title">AI 解读</span>
+      <span class="chat-hdr-subtitle">乾为天 · 动爻第3位 · 铜钱起卦</span>
+    </div>
+  </div>
+
+  <div class="chat-msgs">
+    <div class="chat-msgs-inner">
+
+      <div class="msg-row assistant">
+        <div class="msg-bubble assistant">
+          根据起卦结果，<b>乾为天</b>卦象纯阳，六爻皆阳，象征刚健不息、自强不息的精神。
+        </div>
+      </div>
+
+      <div class="msg-row assistant">
+        <div class="msg-bubble assistant">
+          动爻在第三位，爻辞"君子终日乾乾，夕惕若厉，无咎"，提示你需保持警惕、勤奋不懈，则可免于过失。第三爻处于下卦之终、上卦之始，正是转折之位。
+        </div>
+      </div>
+
+      <div class="msg-row user">
+        <div class="msg-bubble user">换工作的时机合适吗？</div>
+      </div>
+
+      <div class="msg-row assistant">
+        <div class="msg-bubble assistant">
+          综合来看，<b>现在换工作是可行的，但需谨慎行事</b>。关键在于"夕惕若厉"——时刻保持警觉，如履薄冰，做好充分准备。乾卦纯阳，本身是吉利的卦象，提示你具备成功的潜力。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="chat-input-wrap">
+    <div class="chat-input-row">
+      <input class="chat-input" placeholder="继续提问…">
+      <button class="chat-send">↑</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="sec-div">—— 历史记录（浅色模式）——</div>
+
+<!-- ============================================================
+     5. HISTORY — clean
+     ============================================================ -->
+<div class="hist-page">
+
+  <div class="hist-body">
+
+    <div class="hist-hdr">
+      <h2 class="hist-title">历史记录</h2>
+      <span class="hist-desc">过往占卜，随时回顾</span>
+    </div>
+
+    <div class="hist-card">
+      <div class="hist-card-top">
+        <span class="hist-badge">铜钱起卦</span>
+        <span class="hist-time">2024-05-04 14:32</span>
+      </div>
+      <span class="hist-gua">䷀ 乾为天 → ䷫ 天风姤</span>
+      <span class="hist-question">我该不该换工作？</span>
+      <span class="hist-preview">乾卦纯阳，刚健中正，利于守正，需警惕自满...</span>
+      <div class="hist-card-bot">
+        <span class="hist-dyn">动爻：第3位</span>
+        <button class="hist-del">删除</button>
+      </div>
+    </div>
+
+    <div class="hist-card">
+      <div class="hist-card-top">
+        <span class="hist-badge">数字起卦</span>
+        <span class="hist-time">2024-05-03 09:15</span>
+      </div>
+      <span class="hist-gua">䷂ 水雷屯 → ䷃ 山水蒙</span>
+      <span class="hist-question">要不要报那个培训班？</span>
+      <span class="hist-preview">屯卦表示初创之难，需耐心等待...</span>
+      <div class="hist-card-bot">
+        <span class="hist-dyn">动爻：第2位</span>
+        <button class="hist-del">删除</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="sec-div">—— 个人中心（浅色模式）——</div>
+
+<!-- ============================================================
+     6. PROFILE — clean
+     ============================================================ -->
+<div class="prof-page">
+
+  <div class="prof-body">
+
+    <div class="prof-card">
+      <div class="prof-avatar"><span class="prof-av-txt">爻</span></div>
+      <span class="prof-name">爻爻用户</span>
+      <span class="prof-id">ID: YAO-20240504</span>
+
+      <div class="prof-stats">
+        <div class="prof-stat"><span class="prof-stat-n">12</span><span class="prof-stat-l">占卜次数</span></div>
+        <div class="prof-stat"><span class="prof-stat-n">64</span><span class="prof-stat-l">已学卦象</span></div>
+        <div class="prof-stat"><span class="prof-stat-n">3</span><span class="prof-stat-l">收藏解读</span></div>
+      </div>
+    </div>
+
+    <div class="prof-menu">
+      <div class="prof-menu-item"><span class="prof-mi">📖</span><span class="prof-ml">我的解读</span><span class="prof-ma">→</span></div>
+      <div class="prof-menu-item"><span class="prof-mi">⭐</span><span class="prof-ml">收藏解读</span><span class="prof-ma">→</span></div>
+      <div class="prof-menu-item"><span class="prof-mi">⚙</span><span class="prof-ml">设置</span><span class="prof-ma">→</span></div>
+    </div>
+
+    <div class="prof-footer">爻爻 · 以卦明辨</div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+// 爻爻 Design System v3
+// Two modes: Warm (Landing/Form/Paipan) + Clean (Chat/History/Profile)
+
+// ============================================================
+// CSS Custom Properties
+// ============================================================
+:root {
+  // Warm palette
+  --warm-start:  #ec5930;
+  --warm-mid:    #dea749;
+  --warm-end:    #f6bc4f;
+  --gold:        #d4a030;
+  --gold-soft:   rgba(212,160,48,0.15);
+  --gold-text:   #b8891e;
+  --accent:      #ec5930;
+  --accent-hov:  #d1441e;
+
+  // Clean palette
+  --clean-bg:    #faf8f3;
+  --clean-card:  #ffffff;
+  --clean-border:#ebe5d8;
+  --ink:         #1a1410;
+  --ink-sec:     #6b6058;
+  --ink-dim:     #a09888;
+
+  // Shared
+  --color-a:     #5b7fc7;
+  --color-b:     #d4785c;
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-full: 9999px;
+  --font:        -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+// ============================================================
+// Base
+// ============================================================
+page {
+  background: var(--clean-bg);
+  color: var(--ink);
+  font-family: var(--font);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ============================================================
+// Background modes
+// ============================================================
+.warm-bg {
+  background: linear-gradient(170deg, #ec5930 0%, #dea749 40%, #f6bc4f 100%);
+  min-height: 100vh;
+}
+
+.clean-bg {
+  background: var(--clean-bg);
+  min-height: 100vh;
+}
+
+// ============================================================
+// Dark card (warm mode)
+// ============================================================
+.dark-card {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+
+.dark-card-label {
+  font-size: 11px;
+  color: var(--gold-text);
+  letter-spacing: 2px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 14px;
+  opacity: 0.85;
+}
+
+// ============================================================
+// Section utilities
+// ============================================================
+.section-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-text);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+// ============================================================
+// Loading
+// ============================================================
+.loading-spinner {
+  width: 32px; height: 32px;
+  border: 2px solid rgba(0,0,0,0.08);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 40px auto;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ============================================================
+// Scrollbar
+// ============================================================
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }

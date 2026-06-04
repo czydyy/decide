@@ -1,0 +1,51 @@
+// 爻爻 — Profile (clean mode)
+@import '../../app.scss';
+
+.prof-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+.prof-body { width: 100%; max-width: 420px; }
+
+// Profile card
+.prof-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 36px 24px 28px;
+  text-align: center;
+}
+
+.prof-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #ec5930, #dea749);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 20px rgba(236,89,48,0.2);
+}
+.prof-av-txt { font-size: 36px; color: #fff; font-weight: 700; }
+
+.prof-name { font-size: 20px; font-weight: 700; color: var(--ink); display: block; }
+.prof-id   { font-size: 12px; color: var(--ink-dim); margin-top: 4px; display: block; }
+
+// Stats
+.prof-stats { display: flex; gap: 8px; margin-top: 24px; }
+.prof-stat {
+  flex: 1; text-align: center; padding: 18px 6px;
+  background: #faf7f2; border-radius: var(--radius-sm);
+}
+.prof-stat-n { font-size: 28px; font-weight: 800; color: var(--gold-text); display: block; }
+.prof-stat-l { font-size: 11px; color: var(--ink-dim); margin-top: 4px; letter-spacing: 1px; display: block; }
+
+// Menu
+.prof-menu { margin-top: 14px; }
+.prof-menu-item {
+  display: flex; align-items: center; padding: 16px 20px;
+  background: #fff; border-bottom: 1px solid var(--clean-border);
+  &:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  &:last-child  { border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-bottom: none; }
+}
+.prof-mi { font-size: 18px; margin-right: 14px; }
+.prof-ml { font-size: 15px; color: var(--ink); flex: 1; }
+.prof-ma { font-size: 15px; color: var(--ink-dim); }
+
+.prof-footer { text-align: center; margin-top: 32px; font-size: 12px; color: var(--ink-dim); letter-spacing: 2px; }

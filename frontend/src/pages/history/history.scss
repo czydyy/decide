@@ -1,0 +1,36 @@
+// 爻爻 — History (clean mode)
+@import '../../app.scss';
+
+.hist-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+.hist-body { width: 100%; max-width: 680px; }
+
+.hist-hdr { margin-bottom: 28px; }
+.hist-title { font-size: 28px; font-weight: 800; color: var(--ink); letter-spacing: 2px; }
+.hist-desc  { font-size: 14px; color: var(--ink-dim); margin-top: 6px; display: block; }
+
+// Empty
+.hist-empty { text-align: center; padding: 80px 0; }
+.hist-empty-icon { font-size: 52px; display: block; margin-bottom: 16px; }
+.hist-empty-txt  { font-size: 17px; color: var(--ink); display: block; }
+.hist-empty-hint { font-size: 14px; color: var(--ink-dim); margin-top: 6px; display: block; }
+
+// Cards
+.hist-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 22px; margin-bottom: 12px;
+}
+.hist-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.hist-badge { font-size: 11px; color: var(--gold-text); background: var(--gold-soft); padding: 3px 12px; border-radius: var(--radius-full); font-weight: 500; }
+.hist-time  { font-size: 12px; color: var(--ink-dim); }
+
+.hist-gua      { font-size: 17px; font-weight: 700; color: var(--ink); display: block; }
+.hist-question { font-size: 15px; color: var(--ink-sec); margin-top: 5px; display: block; }
+.hist-preview  { font-size: 13px; color: var(--ink-dim); margin-top: 8px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.hist-card-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--clean-border); }
+.hist-dyn { font-size: 12px; color: var(--ink-dim); }
+.hist-del { font-size: 13px; color: #c85b40; }

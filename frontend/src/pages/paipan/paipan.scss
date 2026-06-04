@@ -1,0 +1,99 @@
+// 爻爻 — Paipan (warm mode)
+@import '../../app.scss';
+
+.paipan-page {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 24px 48px;
+}
+
+.paipan-top {
+  width: 100%; max-width: 480px;
+  display: flex; align-items: center; margin-bottom: 24px;
+  gap: 12px;
+}
+.paipan-back {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(26,20,16,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--ink);
+}
+.paipan-title {
+  font-size: 19px; font-weight: 700; color: var(--ink);
+  letter-spacing: 2px;
+}
+
+.paipan-body { width: 100%; max-width: 480px; }
+
+// Question banner
+.q-banner {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 20px 22px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+.q-banner-lbl { font-size: 11px; color: rgba(240,235,224,0.35); letter-spacing: 2px; display: block; margin-bottom: 6px; }
+.q-banner-txt { font-size: 16px; color: #f0ebe0; font-weight: 500; line-height: 1.6; }
+
+// Gua hero
+.gua-hero {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+  text-align: center;
+}
+.gua-symbol { font-size: 64px; display: block; margin-bottom: 12px; }
+.gua-name   { font-size: 24px; font-weight: 700; color: #f0ebe0; display: block; }
+.gua-sub    { font-size: 13px; color: rgba(240,235,224,0.4); margin-top: 4px; display: block; }
+.gua-ci     { font-size: 14px; color: rgba(240,235,224,0.55); line-height: 1.8; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+// Yao table
+.yao-card {
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 20px; margin-bottom: 14px;
+  backdrop-filter: blur(14px);
+}
+
+.yao-table { margin-top: 4px; }
+
+.yao-row {
+  display: flex; align-items: center; padding: 9px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.yao-row:last-child { border-bottom: none; }
+.yao-hdr { border-bottom: 1px solid rgba(240,192,80,0.3) !important; padding-bottom: 10px; margin-bottom: 4px; }
+.yao-row.chg { background: var(--gold-soft); border-radius: var(--radius-sm); }
+
+.yao-col { font-size: 13px; color: rgba(240,235,224,0.8); text-align: center; }
+.yao-hdr .yao-col { font-size: 11px; color: rgba(240,235,224,0.35); font-weight: 600; letter-spacing: 1px; }
+.col-pos{width:10%}.col-sym{width:20%}.col-nj{width:16%}.col-lq{width:18%}.col-ls{width:18%}.col-sy{width:18%}
+.shi{color:#5bcc8f;font-weight:600}.ying{color:#f0b040;font-weight:600}
+
+// Transform grid
+.tf-grid { display: flex; gap: 10px; }
+.tf-item {
+  flex: 1; text-align: center;
+  background: rgba(20,16,12,0.78);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-md); padding: 20px 8px;
+  backdrop-filter: blur(14px);
+}
+.tf-lbl { font-size: 11px; color: rgba(240,235,224,0.35); letter-spacing: 1px; display: block; }
+.tf-sym { font-size: 36px; display: block; margin: 8px 0; }
+.tf-nm  { font-size: 15px; color: #f0ebe0; font-weight: 500; display: block; }
+
+.paipan-to-chat {
+  width: 100%; height: 50px;
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 500; color: #f0ebe0;
+  letter-spacing: 2px; display: flex;
+  align-items: center; justify-content: center;
+  margin-top: 10px;
+}
