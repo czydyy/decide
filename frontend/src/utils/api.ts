@@ -98,9 +98,13 @@ export function streamConversation(
 ): AbortController {
   const controller = new AbortController();
 
+  const token = getToken();
   fetch(`${BASE_URL}/api/conversations/${convId}/stream`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    },
     body: JSON.stringify({ content }),
     signal: controller.signal,
   })

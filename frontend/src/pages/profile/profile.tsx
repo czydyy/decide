@@ -14,14 +14,17 @@ interface UserProfile {
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadProfile();
   }, []);
 
   const loadProfile = async () => {
+    setLoading(true);
     if (!isLoggedIn()) {
       setUser(null);
+      setLoading(false);
       return;
     }
     try {
@@ -30,6 +33,8 @@ export default function ProfilePage() {
     } catch {
       const cached = getUser();
       setUser(cached as UserProfile);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,97 +62,89 @@ export default function ProfilePage() {
     { icon: '⚙', label: '设置', action: 'settings' },
   ];
 
-  // Not logged in
-  if (!user) {
-    return (
-      <View className="clean-bg prof-page">
-        <View className="prof-body">
-          <View className="prof-card">
+  return (
+    <View className="clean-bg prof-page">
+      {/* Nav */}
+      <View className="subnav">
+        <View className="subnav-inner">
+          <View className="subnav-brand" onClick={() => Taro.navigateTo({ url: '/pages/index/index' })}>
+            <Text className="subnav-icon">☯</Text>
+            <Text className="subnav-logo">爻爻</Text>
+          </View>
+        </View>
+      </View>
+
+      <View className="prof-body">
+        {loading ? (
+          <View className="loading-spinner" />
+        ) : !user ? (
+          /* ===== Not logged in ===== */
+          <View className="prof-hero-card">
             <View className="prof-avatar">
               <Text className="prof-av-txt">爻</Text>
             </View>
             <Text className="prof-name">未登录</Text>
-            <Text className="prof-id">登录后可查看占卜记录</Text>
-            <View
-              style={{
-                marginTop: '24px', height: '48px', background: 'var(--accent)',
-                borderRadius: 'var(--radius-md)', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-                color: '#fff', fontSize: '15px', fontWeight: 600,
-                letterSpacing: '2px',
-              }}
-              onClick={handleLogin}
-            >
+            <Text className="prof-sub">登录后可查看占卜记录</Text>
+            <View className="prof-login-btn" onClick={handleLogin}>
               <Text>登录 / 注册</Text>
             </View>
           </View>
-        </View>
-      </View>
-    );
-  }
+        ) : (
+          /* ===== Logged in ===== */
+          <>
+            <View className="prof-hero-card">
+              <View className="prof-avatar">
+                <Text className="prof-av-txt">{user.nickname?.[0] || '爻'}</Text>
+              </View>
+              <Text className="prof-name">{user.nickname || '爻爻用户'}</Text>
+              {user.phone && (
+                <Text className="prof-sub">{user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}</Text>
+              )}
 
-  return (
-    <View className="clean-bg prof-page">
-      <View className="prof-body">
-        {/* Profile card */}
-        <View className="prof-card">
-          <View className="prof-avatar">
-            <Text className="prof-av-txt">{user?.nickname?.[0] || '爻'}</Text>
-          </View>
-          <Text className="prof-name">{user?.nickname || '爻爻用户'}</Text>
-          <Text className="prof-id">ID: {user?.id?.slice(0, 8) || '---'}</Text>
-
-          <View className="prof-stats">
-            <View className="prof-stat">
-              <Text className="prof-stat-n">12</Text>
-              <Text className="prof-stat-l">占卜次数</Text>
+              <View className="prof-stats">
+                <View className="prof-stat">
+                  <Text className="prof-stat-n">12</Text>
+                  <Text className="prof-stat-l">占卜次数</Text>
+                </View>
+                <View className="prof-stat">
+                  <Text className="prof-stat-n">64</Text>
+                  <Text className="prof-stat-l">已学卦象</Text>
+                </View>
+                <View className="prof-stat">
+                  <Text className="prof-stat-n">3</Text>
+                  <Text className="prof-stat-l">收藏解读</Text>
+                </View>
+              </View>
             </View>
-            <View className="prof-stat">
-              <Text className="prof-stat-n">64</Text>
-              <Text className="prof-stat-l">已学卦象</Text>
-            </View>
-            <View className="prof-stat">
-              <Text className="prof-stat-n">3</Text>
-              <Text className="prof-stat-l">收藏解读</Text>
-            </View>
-          </View>
-        </View>
 
-        {/* Menu */}
-        <View className="prof-menu">
-          {menuItems.map((item, i) => (
-            <View
-              key={i}
-              className="prof-menu-item"
-              onClick={() => {
-                if (item.action === 'history') {
-                  Taro.navigateTo({ url: '/pages/history/history' });
-                } else {
-                  Taro.showToast({ title: '功能开发中', icon: 'none' });
-                }
-              }}
-            >
-              <Text className="prof-mi">{item.icon}</Text>
-              <Text className="prof-ml">{item.label}</Text>
-              <Text className="prof-ma">→</Text>
+            {/* Menu */}
+            <View className="prof-menu">
+              {menuItems.map((item, i) => (
+                <View
+                  key={i}
+                  className="prof-menu-item"
+                  onClick={() => {
+                    if (item.action === 'history') {
+                      Taro.navigateTo({ url: '/pages/history/history' });
+                    } else {
+                      Taro.showToast({ title: '功能开发中', icon: 'none' });
+                    }
+                  }}
+                >
+                  <Text className="prof-mi">{item.icon}</Text>
+                  <Text className="prof-ml">{item.label}</Text>
+                  <Text className="prof-ma">→</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
 
-        <View
-          style={{
-            marginTop: '16px', height: '48px', background: '#fff',
-            borderRadius: 'var(--radius-md)', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-            color: 'var(--accent)', fontSize: '15px', fontWeight: 500,
-            border: '1px solid var(--clean-border)',
-          }}
-          onClick={handleLogout}
-        >
-          <Text>退出登录</Text>
-        </View>
+            <View className="prof-logout-btn" onClick={handleLogout}>
+              <Text>退出登录</Text>
+            </View>
 
-        <View className="prof-footer">爻爻 · 以卦明辨</View>
+            <View className="prof-footer">爻爻 · 以卦明辨</View>
+          </>
+        )}
       </View>
     </View>
   );

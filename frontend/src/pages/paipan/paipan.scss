@@ -4,26 +4,33 @@
 .paipan-page {
   min-height: 100vh;
   display: flex; flex-direction: column; align-items: center;
-  padding: 40px 24px 48px;
+  padding: 0 24px 48px;
 }
 
-.paipan-top {
-  width: 100%; max-width: 480px;
-  display: flex; align-items: center; margin-bottom: 24px;
-  gap: 12px;
+// Nav
+.paipan-nav {
+  width: 100%; padding: 24px 8px 20px;
+  flex-shrink: 0;
 }
-.paipan-back {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: rgba(26,20,16,0.08);
+.paipan-nav-inner {
+  width: 100%; max-width: 500px; margin: 0 auto;
+  display: flex; align-items: center;
+}
+.paipan-nav-left {
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+}
+.paipan-nav-back {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(26,20,16,0.1);
   display: flex; align-items: center; justify-content: center;
-  font-size: 15px; color: var(--ink);
+  font-size: 16px; color: var(--ink);
 }
-.paipan-title {
-  font-size: 19px; font-weight: 700; color: var(--ink);
+.paipan-nav-title {
+  font-size: 20px; font-weight: 700; color: var(--ink);
   letter-spacing: 2px;
 }
 
-.paipan-body { width: 100%; max-width: 480px; }
+.paipan-body { width: 100%; max-width: 500px; margin: 0 auto; }
 
 // Question banner
 .q-banner {

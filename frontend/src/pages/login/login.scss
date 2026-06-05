@@ -1,68 +1,90 @@
-// 爻爻 — Login
+// 爻爻 — Login / Register
 @import '../../app.scss';
 
-.login-page {
+.lgn-page {
   min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 60px 24px 48px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; background: var(--clean-bg);
 }
-.login-body { width: 100%; max-width: 380px; }
 
-.login-brand {
-  text-align: center; margin-bottom: 40px;
+.lgn-card {
+  width: 100%; max-width: 400px;
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: 20px; padding: 44px 36px 36px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
 }
-.login-brand-name { font-size: 36px; font-weight: 800; color: var(--ink); letter-spacing: 8px; }
+
+// Brand
+.lgn-brand { text-align: center; margin-bottom: 36px; }
+.lgn-brand-name {
+  font-size: 32px; font-weight: 800; color: var(--ink); letter-spacing: 8px;
+}
+.lgn-brand-sub {
+  display: block; margin-top: 8px;
+  font-size: 13px; color: var(--ink-dim); letter-spacing: 3px;
+}
 
 // Tabs
-.login-tabs { display: flex; margin-bottom: 28px; }
-.login-tab {
-  flex: 1; text-align: center; padding: 12px 0;
-  font-size: 15px; color: var(--ink-dim);
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+.lgn-tabs {
+  display: flex; margin-bottom: 28px;
+  background: #f5f1ea; border-radius: var(--radius-sm); padding: 3px;
 }
-.login-tab--on {
-  color: var(--ink); font-weight: 600;
-  border-bottom-color: var(--accent);
+.lgn-tab {
+  flex: 1; text-align: center; padding: 10px 0;
+  font-size: 14px; color: var(--ink-dim); font-weight: 500;
+  border-radius: 6px; transition: all 0.2s; cursor: pointer;
+}
+.lgn-tab--on {
+  background: #fff; color: var(--ink); font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 // Fields
-.login-field { margin-bottom: 18px; }
-.login-label {
-  display: block; font-size: 13px; color: var(--ink-sec);
-  margin-bottom: 8px; font-weight: 500;
+.lgn-fields { margin-bottom: 4px; }
+.lgn-field { margin-bottom: 18px; }
+.lgn-label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--ink-sec); margin-bottom: 8px;
 }
-.login-inp {
+.lgn-inp {
   width: 100%; height: 48px;
-  background: #f5f1ea; border: 1px solid transparent;
+  background: #f8f5ef; border: 1px solid transparent;
   border-radius: var(--radius-sm); padding: 0 14px;
   font-size: 15px; color: var(--ink);
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   &:focus { border-color: var(--gold); background: #fff; }
 }
-.login-ph { color: var(--ink-dim); }
+.lgn-inp-ph { color: var(--ink-dim); }
 
-// SMS row
-.sms-row { display: flex; gap: 10px; }
-.sms-inp { flex: 1; }
-.sms-btn {
+// SMS
+.lgn-sms-row { display: flex; gap: 10px; }
+.lgn-sms-inp { flex: 1; }
+.lgn-sms-btn {
   flex-shrink: 0; height: 48px; padding: 0 16px;
-  background: #f5f1ea; border: 1px solid var(--clean-border);
+  background: #f8f5ef; border: 1px solid var(--clean-border);
   border-radius: var(--radius-sm); font-size: 13px;
   color: var(--ink-sec); white-space: nowrap;
   display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s;
+  &:active { background: #ebe5d8; }
 }
-.sms-btn--off { color: var(--ink-dim); opacity: 0.5; }
+.lgn-sms-btn--off { color: var(--ink-dim); opacity: 0.5; pointer-events: none; }
 
 // Submit
-.login-submit {
+.lgn-submit {
   width: 100%; height: 50px;
-  background: var(--accent); border-radius: var(--radius-md);
-  font-size: 16px; font-weight: 600; color: #fff;
+  background: var(--ink); border-radius: var(--radius-md);
+  font-size: 16px; font-weight: 700; color: #fff;
   letter-spacing: 2px; display: flex;
   align-items: center; justify-content: center;
-  margin-top: 24px;
+  margin-top: 26px; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  &:active { transform: scale(0.98); }
 }
-.login-submit--off { opacity: 0.4; pointer-events: none; }
+.lgn-submit--off { opacity: 0.35; pointer-events: none; }
 
-.login-error { display: block; font-size: 13px; color: var(--accent); margin-top: 10px; text-align: center; }
+.lgn-error {
+  display: block; font-size: 13px; color: var(--accent);
+  margin-top: 10px; text-align: center;
+}

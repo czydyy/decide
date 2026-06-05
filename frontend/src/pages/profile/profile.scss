@@ -1,51 +1,92 @@
-// 爻爻 — Profile (clean mode)
+// 爻爻 — Profile
 @import '../../app.scss';
 
 .prof-page {
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+
+// Body
+.prof-body {
+  width: 100%; max-width: 460px; margin: 0 auto;
   padding: 40px 24px 48px;
 }
-.prof-body { width: 100%; max-width: 420px; }
 
-// Profile card
-.prof-card {
+// Hero card
+.prof-hero-card {
   background: #fff; border: 1px solid var(--clean-border);
-  border-radius: var(--radius-lg); padding: 36px 24px 28px;
+  border-radius: var(--radius-lg); padding: 40px 24px 32px;
   text-align: center;
 }
 
 .prof-avatar {
-  width: 80px; height: 80px; border-radius: 50%;
+  width: 84px; height: 84px; border-radius: 50%;
   background: linear-gradient(135deg, #ec5930, #dea749);
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 4px 20px rgba(236,89,48,0.2);
+  margin: 0 auto 18px;
+  box-shadow: 0 6px 24px rgba(236,89,48,0.22);
 }
-.prof-av-txt { font-size: 36px; color: #fff; font-weight: 700; }
+.prof-av-txt { font-size: 38px; color: #fff; font-weight: 700; }
 
-.prof-name { font-size: 20px; font-weight: 700; color: var(--ink); display: block; }
-.prof-id   { font-size: 12px; color: var(--ink-dim); margin-top: 4px; display: block; }
+.prof-name {
+  font-size: 22px; font-weight: 700; color: var(--ink); display: block;
+}
+.prof-sub {
+  font-size: 13px; color: var(--ink-dim); margin-top: 4px; display: block;
+}
+
+// Login button
+.prof-login-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 24px;
+  height: 48px; padding: 0 36px;
+  background: var(--accent); border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 600; color: #fff;
+  letter-spacing: 2px; cursor: pointer;
+  box-shadow: 0 4px 18px rgba(236,89,48,0.25);
+}
 
 // Stats
-.prof-stats { display: flex; gap: 8px; margin-top: 24px; }
+.prof-stats { display: flex; gap: 8px; margin-top: 28px; }
+
 .prof-stat {
-  flex: 1; text-align: center; padding: 18px 6px;
+  flex: 1; text-align: center; padding: 22px 8px;
   background: #faf7f2; border-radius: var(--radius-sm);
 }
-.prof-stat-n { font-size: 28px; font-weight: 800; color: var(--gold-text); display: block; }
-.prof-stat-l { font-size: 11px; color: var(--ink-dim); margin-top: 4px; letter-spacing: 1px; display: block; }
+.prof-stat-n {
+  font-size: 30px; font-weight: 800; color: var(--gold-text); display: block;
+}
+.prof-stat-l {
+  font-size: 11px; color: var(--ink-dim); margin-top: 4px;
+  letter-spacing: 1px; display: block;
+}
 
 // Menu
-.prof-menu { margin-top: 14px; }
+.prof-menu { margin-top: 16px; }
+
 .prof-menu-item {
-  display: flex; align-items: center; padding: 16px 20px;
+  display: flex; align-items: center; padding: 18px 22px;
   background: #fff; border-bottom: 1px solid var(--clean-border);
+  cursor: pointer; transition: background 0.15s;
+  &:active { background: #faf8f4; }
   &:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
   &:last-child  { border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-bottom: none; }
 }
-.prof-mi { font-size: 18px; margin-right: 14px; }
-.prof-ml { font-size: 15px; color: var(--ink); flex: 1; }
-.prof-ma { font-size: 15px; color: var(--ink-dim); }
+.prof-mi { font-size: 20px; margin-right: 16px; }
+.prof-ml { font-size: 16px; color: var(--ink); flex: 1; }
+.prof-ma { font-size: 16px; color: var(--ink-dim); }
 
-.prof-footer { text-align: center; margin-top: 32px; font-size: 12px; color: var(--ink-dim); letter-spacing: 2px; }
+// Logout
+.prof-logout-btn {
+  margin-top: 18px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 500; color: var(--accent);
+  cursor: pointer;
+}
+
+// Footer
+.prof-footer {
+  text-align: center; margin-top: 32px;
+  font-size: 13px; color: var(--ink-dim); letter-spacing: 2px;
+}

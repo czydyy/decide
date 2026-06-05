@@ -60,11 +60,13 @@ export default function PaipanPage() {
 
   return (
     <ScrollView className="warm-bg paipan-page" scrollY>
-      <View className="paipan-top">
-        <View className="paipan-back" onClick={() => Taro.navigateBack()}>
-          <Text>←</Text>
+      <View className="paipan-nav">
+        <View className="paipan-nav-inner">
+          <View className="paipan-nav-left" onClick={() => Taro.navigateBack()}>
+            <Text className="paipan-nav-back">←</Text>
+            <Text className="paipan-nav-title">卦象结果</Text>
+          </View>
         </View>
-        <Text className="paipan-title">卦象结果</Text>
       </View>
 
       <View className="paipan-body">

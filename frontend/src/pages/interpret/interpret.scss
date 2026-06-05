@@ -1,35 +1,115 @@
-// 爻爻 — Interpret (warm mode)
+// 爻爻 — Interpret (clean mode)
 @import '../../app.scss';
 
-.interpret-header  { text-align: center; padding: 28px 0 10px; }
-.interpret-title   { display: block; font-size: 22px; font-weight: 600; color: var(--gold-text); letter-spacing: 2px; }
-.interpret-subtitle{ display: block; font-size: 13px; color: var(--ink-dim); margin-top: 8px; }
+.interp-page {
+  min-height: 100vh; display: flex; flex-direction: column;
+}
 
-// Loading
-.loading-section {
-  text-align: center; padding: 60px 0;
+.interp-scroll { flex: 1; overflow-y: auto; }
+
+.interp-body {
+  width: 100%; max-width: 720px; margin: 0 auto;
+  padding: 36px 24px 48px;
+}
+
+// Loading / Error
+.interp-loading { text-align: center; padding: 80px 0; }
+.interp-loading-text { display: block; font-size: 14px; color: var(--ink-dim); margin-top: 16px; }
+.interp-error { text-align: center; padding: 80px 0; }
+.interp-error-text { display: block; font-size: 15px; color: var(--accent); margin-bottom: 20px; }
+.interp-error-btn {
+  display: inline-flex; align-items: center;
+  height: 42px; padding: 0 24px;
+  background: var(--ink); border-radius: var(--radius-md);
+  font-size: 14px; font-weight: 600; color: #fff; cursor: pointer;
+}
+
+// Meta header
+.interp-meta {
   background: #fff; border: 1px solid var(--clean-border);
-  border-radius: var(--radius-md); margin-top: 16px;
+  border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px;
 }
-.loading-text { display: block; font-size: 15px; color: var(--gold-text); margin-top: 16px; }
-.loading-hint { display: block; font-size: 13px; color: var(--ink-dim); margin-top: 8px; }
-
-// Error
-.error-section { text-align: center; padding: 60px 0; }
-.error-text    { display: block; font-size: 15px; color: var(--accent); }
-
-// Content
-.interpret-content { margin-top: 12px; }
-
-.section-heading {
-  display: block; font-size: 16px; font-weight: 600; color: var(--ink);
-  margin-top: 28px; margin-bottom: 10px;
-  padding-bottom: 10px; border-bottom: 1px solid var(--clean-border);
+.interp-question {
+  display: block; font-size: 18px; color: var(--ink);
+  font-weight: 600; line-height: 1.6; margin-bottom: 14px;
+}
+.interp-meta-row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.interp-badge {
+  font-size: 12px; color: var(--gold-text);
+  background: var(--gold-soft); padding: 3px 12px;
+  border-radius: var(--radius-full); font-weight: 500;
+}
+.interp-gua {
+  font-size: 15px; color: var(--ink); font-weight: 600;
+}
+.interp-dongyao {
+  font-size: 13px; color: var(--ink-dim);
 }
 
-.bold-line { display: block; font-size: 15px; color: var(--ink); font-weight: 500; line-height: 1.9; }
-.text-line { display: block; font-size: 14px; color: var(--ink-sec); line-height: 1.9; margin: 2px 0; }
+// Paipan summary
+.interp-paipan-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px;
+}
+.interp-paipan-label {
+  font-size: 13px; font-weight: 600; color: var(--ink-dim);
+  letter-spacing: 2px; display: block; margin-bottom: 14px;
+}
 
-// Actions
-.action-buttons { margin-top: 32px; }
-.btn-outline { text-align: center; margin-top: 12px; }
+// Yao table
+.interp-lines { margin-bottom: 14px; }
+.interp-line-row {
+  display: flex; align-items: center; padding: 8px 4px;
+  border-bottom: 1px solid #f5f0e8;
+  font-size: 13px; color: var(--ink-sec);
+  &:last-child { border-bottom: none; }
+}
+.interp-line-chg {
+  background: var(--gold-soft); border-radius: var(--radius-sm);
+}
+.interp-line-pos     { width: 10%; text-align: center; }
+.interp-line-yao     { width: 20%; text-align: center; font-weight: 600; }
+.interp-line-najia   { width: 16%; text-align: center; }
+.interp-line-liuqin  { width: 18%; text-align: center; }
+.interp-line-liushou { width: 18%; text-align: center; }
+.interp-line-shiying { width: 18%; text-align: center; }
+
+.shi { color: #5bcc8f; font-weight: 600; }
+.ying { color: #f0b040; font-weight: 600; }
+
+.interp-bian {
+  font-size: 14px; color: var(--ink-sec); display: block;
+}
+
+// AI content
+.interp-content-card {
+  background: #fff; border: 1px solid var(--clean-border);
+  border-radius: var(--radius-lg); padding: 24px;
+}
+.interp-content-label {
+  font-size: 13px; font-weight: 600; color: var(--ink-dim);
+  letter-spacing: 2px; display: block; margin-bottom: 16px;
+}
+
+.interp-section-heading {
+  display: block; font-size: 16px; font-weight: 700; color: var(--ink);
+  margin: 24px 0 10px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--clean-border);
+  &:first-child { margin-top: 0; }
+}
+.interp-bold {
+  display: block; font-size: 15px; color: var(--ink);
+  font-weight: 600; line-height: 1.9;
+}
+.interp-line {
+  display: block; font-size: 14px; color: var(--ink-sec);
+  line-height: 1.9; margin: 2px 0;
+}
+
+// No content
+.interp-no-content {
+  text-align: center; padding: 60px 0;
+  font-size: 15px; color: var(--ink-dim);
+}

@@ -1,118 +1,181 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Taro, { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView } from '@tarojs/components';
+import { historyApi } from '@/utils/api';
 import './interpret.scss';
+
+interface RecordDetail {
+  id: string;
+  question: string;
+  method: string;
+  ben_gua_id: number;
+  dong_yao: number[];
+  paipan_result: {
+    ben_gua: { name: string; symbol: string };
+    bian_gua?: { name: string; symbol: string } | null;
+    palace: string;
+    lines: Array<{
+      position: number;
+      yao_type: string;
+      changing: boolean;
+      najia: string;
+      liuqin: string;
+      liushou: string;
+      shiying: string;
+    }>;
+  } | null;
+  ai_interpretation: string | null;
+  created_at: string;
+}
+
+const METHOD_LABELS: Record<string, string> = {
+  yao: '铜钱起卦', number: '数字起卦', time: '时间起卦', manual: '手动排盘',
+};
 
 export default function InterpretPage() {
   const router = useRouter();
-  const [content, setContent] = useState('');
+  const [record, setRecord] = useState<RecordDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const scrollRef = useRef<any>(null);
 
   useEffect(() => {
-    const rawData = router.params.data;
-    const rawQuestion = router.params.question || '';
-    if (!rawData) {
-      setError('缺少排盘数据');
+    const recordId = router.params.recordId;
+    if (!recordId) {
+      setError('缺少记录 ID');
       setLoading(false);
       return;
     }
-
-    const paipanData = JSON.parse(decodeURIComponent(rawData));
-    const question = decodeURIComponent(rawQuestion);
-
-    fetchInterpretation(paipanData, question);
+    fetchRecord(recordId);
   }, []);
 
-  const fetchInterpretation = async (paipanData: any, question: string) => {
+  const fetchRecord = async (id: string) => {
     try {
-      const res = await fetch('http://localhost:8000/api/interpret', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question,
-          category: '综合决策',
-          method: 'manual',
-          day_gan: '甲',
-          month_zhi: '子',
-          day_zhi: '午',
-          hexagram_index: paipanData.ben_gua.index,
-          dong_yao: paipanData.dong_yao || [],
-        }),
-      });
-
-      if (!res.ok) throw new Error('请求失败');
-
-      const result = await res.json();
-      setContent(result.interpretation);
+      const data = await historyApi.get(id) as RecordDetail;
+      setRecord(data);
     } catch (err: any) {
-      setError(err.message || '获取解读失败');
+      setError(err.message || '获取记录失败');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleBackToPaipan = () => {
-    Taro.navigateBack();
-  };
-
   const formatContent = (text: string) => {
-    // Split by sections marked with 【】
     return text.split('\n').map((line, i) => {
-      if (line.startsWith('【') && line.endsWith('】')) {
-        return <Text key={i} className="section-heading">{line}</Text>;
+      if (line.match(/^【.+】$/)) {
+        return <Text key={i} className="interp-section-heading">{line}</Text>;
       }
-      // Bold text
-      if (line.includes('**')) {
-        return <Text key={i} className="bold-line">{line.replace(/\*\*/g, '')}</Text>;
+      if (line.match(/^\*\*.+\*\*$/)) {
+        return <Text key={i} className="interp-bold">{line.replace(/\*\*/g, '')}</Text>;
       }
-      return <Text key={i} className="text-line">{line || ' '}</Text>;
+      return <Text key={i} className="interp-line">{line || ' '}</Text>;
     });
   };
 
   return (
-    <ScrollView className="container" scrollY ref={scrollRef}>
-      <View className="interpret-header">
-        <Text className="interpret-title">AI 解读</Text>
-        <Text className="interpret-subtitle">基于六爻排盘的智能分析</Text>
+    <View className="clean-bg interp-page">
+      {/* Nav */}
+      <View className="subnav">
+        <View className="subnav-inner">
+          <View className="subnav-brand" onClick={() => Taro.navigateTo({ url: '/pages/index/index' })}>
+            <Text className="subnav-icon">☯</Text>
+            <Text className="subnav-logo">爻爻</Text>
+          </View>
+          <View className="subnav-links">
+            <Text className="subnav-link" onClick={() => Taro.navigateBack()}>
+              ← 返回
+            </Text>
+          </View>
+        </View>
       </View>
 
-      {loading && (
-        <View className="loading-section">
-          <View className="loading-spinner" />
-          <Text className="loading-text">正在推演卦象...</Text>
-          <Text className="loading-hint">AI 正在分析本卦、变卦、六亲、世应、旺衰</Text>
-        </View>
-      )}
+      <ScrollView className="interp-scroll" scrollY>
+        <View className="interp-body">
+          {/* Loading */}
+          {loading && (
+            <View className="interp-loading">
+              <View className="loading-spinner" />
+              <Text className="interp-loading-text">加载中...</Text>
+            </View>
+          )}
 
-      {error && (
-        <View className="error-section">
-          <Text className="error-text">{error}</Text>
-          <View className="btn-outline" style={{ marginTop: 16 }} onClick={handleBackToPaipan}>
-            <Text>返回排盘</Text>
-          </View>
-        </View>
-      )}
+          {/* Error */}
+          {error && (
+            <View className="interp-error">
+              <Text className="interp-error-text">{error}</Text>
+              <View className="interp-error-btn" onClick={() => Taro.navigateBack()}>
+                <Text>返回</Text>
+              </View>
+            </View>
+          )}
 
-      {!loading && !error && content && (
-        <View className="interpret-content">
-          <View className="gua-card">
-            {formatContent(content)}
-          </View>
-        </View>
-      )}
+          {/* Content */}
+          {!loading && !error && record && (
+            <>
+              {/* Meta header */}
+              <View className="interp-meta">
+                {record.question && (
+                  <Text className="interp-question">{record.question}</Text>
+                )}
+                <View className="interp-meta-row">
+                  <Text className="interp-badge">{METHOD_LABELS[record.method] || record.method}</Text>
+                  {record.paipan_result?.ben_gua && (
+                    <Text className="interp-gua">
+                      {record.paipan_result.ben_gua.symbol} {record.paipan_result.ben_gua.name}
+                    </Text>
+                  )}
+                  {record.dong_yao?.length > 0 && (
+                    <Text className="interp-dongyao">动爻：第{record.dong_yao.join('、')}位</Text>
+                  )}
+                </View>
+              </View>
 
-      {/* Actions */}
-      {!loading && !error && (
-        <View className="action-buttons">
-          <View className="btn-outline" onClick={handleBackToPaipan}>
-            <Text>查看排盘详情</Text>
-          </View>
-        </View>
-      )}
+              {/* Paipan summary */}
+              {record.paipan_result && (record.paipan_result.bian_gua || record.paipan_result.lines?.length > 0) && (
+                <View className="interp-paipan-card">
+                  <Text className="interp-paipan-label">卦象概要</Text>
+                  {record.paipan_result.lines?.length > 0 && (
+                    <View className="interp-lines">
+                      {[...record.paipan_result.lines].reverse().map((line) => (
+                        <View key={line.position} className={`interp-line-row ${line.changing ? 'interp-line-chg' : ''}`}>
+                          <Text className="interp-line-pos">{line.position}</Text>
+                          <Text className="interp-line-yao">{line.yao_type === 'yang' ? '—' : '-- --'}{line.changing ? ' ○' : ''}</Text>
+                          <Text className="interp-line-najia">{line.najia}</Text>
+                          <Text className="interp-line-liuqin">{line.liuqin}</Text>
+                          <Text className="interp-line-liushou">{line.liushou}</Text>
+                          <Text className={`interp-line-shiying ${line.shiying}`}>{line.shiying}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                  {record.paipan_result.bian_gua && (
+                    <Text className="interp-bian">
+                      变卦：{record.paipan_result.bian_gua.symbol} {record.paipan_result.bian_gua.name}
+                    </Text>
+                  )}
+                </View>
+              )}
 
-      <View style={{ height: 40 }} />
-    </ScrollView>
+              {/* AI Interpretation */}
+              {record.ai_interpretation && (
+                <View className="interp-content-card">
+                  <Text className="interp-content-label">AI 解读</Text>
+                  <View className="interp-content-text">
+                    {formatContent(record.ai_interpretation)}
+                  </View>
+                </View>
+              )}
+
+              {!record.ai_interpretation && (
+                <View className="interp-no-content">
+                  <Text>暂无 AI 解读内容</Text>
+                </View>
+              )}
+            </>
+          )}
+
+          <View style={{ height: 48 }} />
+        </View>
+      </ScrollView>
+    </View>
   );
 }

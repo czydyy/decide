@@ -119,4 +119,37 @@ export default function HistoryPage() {
                   <Text>{record.ben_gua_name}</Text>
                 </View>
                 <Text className="hist-card-meta">
-                  {record.dong_yao && reco
+                  {record.dong_yao && record.dong_yao.length > 0
+                    ? `动爻：第${record.dong_yao.join('、')}位`
+                    : ''}
+                </Text>
+              </View>
+              <View className="hist-card-right">
+                <View className="hist-card-toprow">
+                  <Text className="hist-badge">{METHOD_LABELS[record.method] || record.method}</Text>
+                  <Text className="hist-time">{formatTime(record.created_at)}</Text>
+                </View>
+                {record.question && (
+                  <Text className="hist-question">{record.question}</Text>
+                )}
+                {record.ai_interpretation && (
+                  <Text className="hist-preview">{record.ai_interpretation}</Text>
+                )}
+                <View className="hist-card-bot">
+                  <Text
+                    className="hist-del"
+                    onClick={(e) => { e.stopPropagation(); handleDelete(record.id); }}
+                  >
+                    删除
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+
+          <View style={{ height: 48 }} />
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

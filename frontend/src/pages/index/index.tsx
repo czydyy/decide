@@ -180,4 +180,81 @@ export default function IndexPage() {
             {/* Method */}
             <View className="panel-field">
               <Text className="panel-label">起卦方式</Text>
-              <View className=
+              <View className="panel-tabs">
+                {methods.map((m) => (
+                  <View
+                    key={m.key}
+                    className={`panel-tab ${method === m.key ? 'panel-tab--on' : ''}`}
+                    onClick={() => setMethod(m.key)}
+                  >
+                    <Text>{m.label}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            {/* Number inputs */}
+            {method === 'number' && (
+              <View className="panel-nums">
+                {([
+                  { label: '上卦', key: 'n1' as const, hint: '1-8' },
+                  { label: '下卦', key: 'n2' as const, hint: '1-8' },
+                  { label: '动爻', key: 'n3' as const, hint: '1-6' },
+                ]).map((n) => (
+                  <View className="panel-num-cell" key={n.key}>
+                    <Text className="panel-num-lbl">{n.label}</Text>
+                    <Input
+                      className="panel-num-inp"
+                      type="number"
+                      placeholder={n.hint}
+                      value={numbers[n.key]}
+                      onInput={(e) =>
+                        setNumbers({ ...numbers, [n.key]: e.detail.value })
+                      }
+                    />
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Chips */}
+            <View className="panel-chips">
+              <Text className="panel-chips-label">试试这些问题</Text>
+              <View className="panel-chips-row">
+                {CHIPS.map((t) => (
+                  <View
+                    key={t}
+                    className={`panel-chip ${question === t ? 'panel-chip--on' : ''}`}
+                    onClick={() => setQuestion(t)}
+                  >
+                    <Text>{t}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            {/* Submit */}
+            <View
+              className={`panel-submit ${canStart ? '' : 'panel-submit--off'} ${loading ? 'panel-submit--load' : ''}`}
+              onClick={handleStart}
+            >
+              <Text>{loading ? '起卦中…' : '起卦解惑'}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {/* ==================== FOOTER ==================== */}
+      <View className="footer">
+        <View className="footer-inner">
+          <View className="footer-brand">
+            <Text className="footer-brand-icon">☯</Text>
+            <Text className="footer-brand-name">爻爻</Text>
+          </View>
+          <Text className="footer-tagline">以千年智慧，解今日困惑</Text>
+          <Text className="footer-copy">© 2024 爻爻 · 六爻决策助手</Text>
+        </View>
+      </View>
+    </View>
+  );
+}

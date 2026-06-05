@@ -107,6 +107,24 @@ page {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 // ============================================================
+// Shared sub-page navigation
+// ============================================================
+.subnav {
+  width: 100%; height: 56px; padding: 0 32px;
+  flex-shrink: 0; display: flex; align-items: center;
+  background: #fff; border-bottom: 1px solid var(--clean-border);
+}
+.subnav-inner {
+  width: 100%; max-width: 1160px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.subnav-brand { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.subnav-icon { font-size: 20px; color: var(--ink); }
+.subnav-logo { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: 3px; }
+.subnav-links { display: flex; align-items: center; gap: 24px; }
+.subnav-link { font-size: 14px; color: var(--ink-dim); }
+
+// ============================================================
 // Scrollbar
 // ============================================================
 ::-webkit-scrollbar { width: 4px; }

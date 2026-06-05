@@ -65,99 +65,106 @@ export default function LoginPage() {
   };
 
   return (
-    <View className="login-page">
-      <View className="login-body">
-        <View className="login-brand">
-          <Text className="login-brand-name">爻爻</Text>
+    <View className="lgn-page">
+      <View className="lgn-card">
+        {/* Brand */}
+        <View className="lgn-brand">
+          <Text className="lgn-brand-name">爻爻</Text>
+          <Text className="lgn-brand-sub">两难之间，以卦明辨</Text>
         </View>
 
-        <View className="login-tabs">
+        {/* Tabs */}
+        <View className="lgn-tabs">
           <View
-            className={`login-tab ${isLogin ? 'login-tab--on' : ''}`}
+            className={`lgn-tab ${isLogin ? 'lgn-tab--on' : ''}`}
             onClick={() => { setMode('login'); setError(''); }}
           >
             <Text>登录</Text>
           </View>
           <View
-            className={`login-tab ${mode === 'register' ? 'login-tab--on' : ''}`}
+            className={`lgn-tab ${mode === 'register' ? 'lgn-tab--on' : ''}`}
             onClick={() => { setMode('register'); setError(''); }}
           >
             <Text>注册</Text>
           </View>
         </View>
 
-        <View className="login-field">
-          <Text className="login-label">手机号</Text>
-          <Input
-            className="login-inp"
-            placeholder="请输入手机号"
-            placeholderClass="login-ph"
-            type="number"
-            maxlength={11}
-            value={phone}
-            onInput={(e) => setPhone(e.detail.value)}
-          />
-        </View>
-
-        {!isLogin && (
-          <View className="login-field">
-            <Text className="login-label">验证码</Text>
-            <View className="sms-row">
-              <Input
-                className="login-inp sms-inp"
-                placeholder="请输入验证码"
-                placeholderClass="login-ph"
-                type="number"
-                maxlength={6}
-                value={smsCode}
-                onInput={(e) => setSmsCode(e.detail.value)}
-              />
-              <View
-                className={`sms-btn ${countdown > 0 || phone.length !== 11 ? 'sms-btn--off' : ''}`}
-                onClick={handleSendSms}
-              >
-                <Text>{countdown > 0 ? `${countdown}s` : '发送验证码'}</Text>
-              </View>
-            </View>
-          </View>
-        )}
-
-        <View className="login-field">
-          <Text className="login-label">密码</Text>
-          <Input
-            className="login-inp"
-            placeholder="请输入密码（至少6位）"
-            placeholderClass="login-ph"
-            password
-            maxlength={64}
-            value={password}
-            onInput={(e) => setPassword(e.detail.value)}
-          />
-        </View>
-
-        {!isLogin && (
-          <View className="login-field">
-            <Text className="login-label">确认密码</Text>
+        {/* Fields */}
+        <View className="lgn-fields">
+          <View className="lgn-field">
+            <Text className="lgn-label">手机号</Text>
             <Input
-              className="login-inp"
-              placeholder="请再次输入密码"
-              placeholderClass="login-ph"
-              password
-              maxlength={64}
-              value={password2}
-              onInput={(e) => setPassword2(e.detail.value)}
+              className="lgn-inp"
+              placeholder="请输入手机号"
+              placeholderClass="lgn-inp-ph"
+              type="number"
+              maxlength={11}
+              value={phone}
+              onInput={(e) => setPhone(e.detail.value)}
             />
           </View>
-        )}
 
+          {!isLogin && (
+            <View className="lgn-field">
+              <Text className="lgn-label">验证码</Text>
+              <View className="lgn-sms-row">
+                <Input
+                  className="lgn-inp lgn-sms-inp"
+                  placeholder="请输入验证码"
+                  placeholderClass="lgn-inp-ph"
+                  type="number"
+                  maxlength={6}
+                  value={smsCode}
+                  onInput={(e) => setSmsCode(e.detail.value)}
+                />
+                <View
+                  className={`lgn-sms-btn ${countdown > 0 || phone.length !== 11 ? 'lgn-sms-btn--off' : ''}`}
+                  onClick={handleSendSms}
+                >
+                  <Text>{countdown > 0 ? `${countdown}s` : '发送验证码'}</Text>
+                </View>
+              </View>
+            </View>
+          )}
+
+          <View className="lgn-field">
+            <Text className="lgn-label">密码</Text>
+            <Input
+              className="lgn-inp"
+              placeholder={isLogin ? '请输入密码' : '请输入密码（至少6位）'}
+              placeholderClass="lgn-inp-ph"
+              password
+              maxlength={64}
+              value={password}
+              onInput={(e) => setPassword(e.detail.value)}
+            />
+          </View>
+
+          {!isLogin && (
+            <View className="lgn-field">
+              <Text className="lgn-label">确认密码</Text>
+              <Input
+                className="lgn-inp"
+                placeholder="请再次输入密码"
+                placeholderClass="lgn-inp-ph"
+                password
+                maxlength={64}
+                value={password2}
+                onInput={(e) => setPassword2(e.detail.value)}
+              />
+            </View>
+          )}
+        </View>
+
+        {/* Submit */}
         <View
-          className={`login-submit ${canSubmit ? '' : 'login-submit--off'}`}
+          className={`lgn-submit ${canSubmit ? '' : 'lgn-submit--off'}`}
           onClick={handleSubmit}
         >
           <Text>{loading ? '处理中…' : (isLogin ? '登录' : '注册')}</Text>
         </View>
 
-        {error && <Text className="login-error">{error}</Text>}
+        {error && <Text className="lgn-error">{error}</Text>}
       </View>
     </View>
   );
