@@ -1,0 +1,6 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e6]: "?"
+    - heading "未登录" [level=2] [ref=e7]
+    - paragraph [ref=e8]: 登录后可查看占卜记录
+  - button "登录 / 注册" [ref=e9] [cursor=pointer]

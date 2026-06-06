@@ -1,0 +1,17 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - img [ref=e6]
+    - generic [ref=e9]:
+      - button "历史记录" [ref=e10] [cursor=pointer]
+      - button "登录" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - img [ref=e14]
+    - heading "爻爻" [level=1] [ref=e17]
+    - generic [ref=e18]: 两难之间，以卦明辨
+    - generic [ref=e19]:
+      - button "我该不该换工作？" [ref=e20] [cursor=pointer]
+      - button "要不要买这套房子？" [ref=e21] [cursor=pointer]
+      - button "这个时机创业合适吗？" [ref=e22] [cursor=pointer]
+      - button "这次投资能成功吗？" [ref=e23] [cursor=pointer]
+    - button "开始起卦" [ref=e24] [cursor=pointer]
+  - generic [ref=e25]: 以千年智慧，解今日困惑

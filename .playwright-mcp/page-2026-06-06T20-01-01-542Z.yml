@@ -1,0 +1,24 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - button "←" [ref=e6] [cursor=pointer]
+    - heading "历史记录" [level=1] [ref=e7]
+  - generic [ref=e8] [cursor=pointer]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: 铜钱
+      - generic [ref=e11]: 2026/6/7
+    - generic [ref=e12]: 乾为天
+    - generic [ref=e13]: 我该不该换工作？
+    - generic [ref=e14]: 此卦提示你应该...
+    - generic [ref=e15]:
+      - generic [ref=e16]: "动爻: 2"
+      - button "删除" [ref=e17]
+  - generic [ref=e18] [cursor=pointer]:
+    - generic [ref=e19]:
+      - generic [ref=e20]: 数字
+      - generic [ref=e21]: 2026/6/6
+    - generic [ref=e22]: 地天泰
+    - generic [ref=e23]: 这次投资能成功吗？
+    - generic [ref=e24]: 地天泰卦，天地交泰...
+    - generic [ref=e25]:
+      - generic [ref=e26]: "动爻: —"
+      - button "删除" [ref=e27]

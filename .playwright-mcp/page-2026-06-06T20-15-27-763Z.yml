@@ -1,0 +1,5 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - button "←" [ref=e7] [cursor=pointer]
+    - generic [ref=e8]: 历史记录
+  - generic [ref=e9]: 过往占卜，随时回顾

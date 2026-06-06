@@ -86,25 +86,6 @@ export default function LandingPage() {
 
           <button className="landing-cta" onClick={() => setOpen(true)}>开始起卦</button>
         </div>
-
-        {/* Steps section */}
-        <div style={{maxWidth:680,margin:"0 auto",padding:"0 24px 60px",textAlign:"center"}}>
-          <div style={{display:"flex",gap:40,justifyContent:"center",flexWrap:"wrap"}}>
-            {[
-              {step:"01",title:"写下困惑",desc:"将你纠结的事情输入"},
-              {step:"02",title:"AI 起卦",desc:"铜钱、数字或时间起卦"},
-              {step:"03",title:"获取解读",desc:"多维度 AI 深度解析"},
-            ].map(s=>(
-              <div key={s.step} style={{textAlign:"center",width:160}}>
-                <span style={{fontSize:13,fontWeight:700,color:"var(--gold-text)",letterSpacing:"0.05em"}}>{s.step}</span>
-                <h3 style={{fontSize:17,fontWeight:700,color:"var(--ink)",marginTop:8}}>{s.title}</h3>
-                <p style={{fontSize:14,color:"var(--ink-dim)",marginTop:4,lineHeight:1.5}}>{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="landing-footer">以千年智慧，解今日困惑</div>
       </div>
     </div>
   )

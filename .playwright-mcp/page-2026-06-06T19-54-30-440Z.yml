@@ -1,0 +1,6 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e7]: 爻
+    - generic [ref=e8]: 未登录
+    - generic [ref=e9]: 登录后查看占卜记录
+  - button "登录 / 注册" [ref=e10] [cursor=pointer]
