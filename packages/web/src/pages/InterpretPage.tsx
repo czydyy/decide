@@ -1,119 +1,26 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { useTheme } from "@/providers/ThemeProvider"
 import { historyApi } from "@/lib/api"
-import { yaoSymbol, formatDate } from "@liuyao/shared"
 import type { HistoryDetail } from "@liuyao/shared"
-import Badge from "@/components/ui/Badge"
+const mL:Record<string,string>={yao:"铜钱起卦",number:"数字起卦",time:"时间起卦",manual:"手动排盘"}
 
 export default function InterpretPage() {
-  const { recordId } = useParams<{ recordId: string }>()
-  const navigate = useNavigate()
-  const { setMode } = useTheme()
-  const [record, setRecord] = useState<HistoryDetail | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const{recordId}=useParams<{recordId:string}>();const navigate=useNavigate();const[rec,setRec]=useState<HistoryDetail|null>(null);const[loading,setLoading]=useState(true)
+  useEffect(()=>{if(recordId)historyApi.get(recordId).then(setRec).catch(()=>{}).finally(()=>setLoading(false))},[recordId])
+  if(loading)return<div className="clean-bg" style={{display:"flex",alignItems:"center",justifyContent:"center"}}><div className="spin spin-dark"/></div>
+  if(!rec)return<div className="clean-bg" style={{display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12}}><p style={{color:"var(--ink-dim)"}}>记录不存在</p><button onClick={()=>navigate(-1)} className="form-back">←</button></div>
 
-  useEffect(() => {
-    setMode("clean")
-    return () => setMode("clean")
-  }, [setMode])
-
-  useEffect(() => {
-    if (!recordId) {
-      setError("缺少记录 ID")
-      setLoading(false)
-      return
-    }
-    historyApi
-      .get(recordId)
-      .then(setRecord)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [recordId])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-clean-bg flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+  return <div className="clean-bg" style={{minHeight:"100vh",padding:"40px 24px 48px",display:"flex",flexDirection:"column",alignItems:"center"}}>
+    <div style={{width:"100%",maxWidth:"var(--chat-max)"}}>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:28}}><button className="form-back" onClick={()=>navigate(-1)}>←</button><span style={{fontSize:19,fontWeight:700,color:"var(--ink)",letterSpacing:2}}>解读详情</span></div>
+      <div style={{background:"#fff",border:"1px solid var(--clean-border)",borderRadius:"var(--radius-lg)",padding:24,marginBottom:14}}>
+        {rec.question&&<h2 style={{fontSize:18,fontWeight:600,color:"var(--ink)",marginBottom:8,lineHeight:1.5}}>{rec.question}</h2>}
+        <div style={{display:"flex",alignItems:"center",gap:8,fontSize:12,color:"var(--ink-dim)"}}><span className="hist-badge">{mL[rec.method]??rec.method}</span><span>{new Date(rec.created_at).toLocaleDateString("zh-CN")}</span></div>
       </div>
-    )
-  }
-
-  if (error || !record) {
-    return (
-      <div className="min-h-screen bg-clean-bg flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-ink-sec mb-4">{error ?? "记录不存在"}</p>
-          <button onClick={() => navigate(-1)} className="text-gold-text">← 返回</button>
-        </div>
-      </div>
-    )
-  }
-
-  const paipan = record.paipan_result
-  const benGua = paipan && typeof paipan === "object" && "ben_gua" in paipan
-    ? (paipan as Record<string, unknown>).ben_gua as Record<string, unknown> | undefined
-    : undefined
-
-  return (
-    <div className="min-h-screen bg-clean-bg">
-      {/* Nav */}
-      <nav className="sticky top-0 z-10 bg-clean-bg/90 backdrop-blur border-b border-clean-border">
-        <div className="max-w-[1200px] mx-auto px-6 py-3 flex items-center gap-4">
-          <button onClick={() => navigate("/")} className="flex items-center gap-2 text-ink-sec hover:text-ink">
-            <span className="text-lg">☯</span>
-            <span className="font-semibold">爻爻</span>
-          </button>
-          <span className="text-ink-dim">/</span>
-          <button onClick={() => navigate(-1)} className="text-ink-dim hover:text-ink">返回</button>
-        </div>
-      </nav>
-
-      <div className="max-w-[680px] mx-auto px-6 py-8 space-y-6">
-        {/* Meta */}
-        <div className="bg-white border border-clean-border rounded-lg p-6">
-          {record.question && (
-            <h2 className="text-lg font-semibold text-ink mb-3">{record.question}</h2>
-          )}
-          <div className="flex items-center gap-2 flex-wrap text-sm text-ink-sec">
-            <Badge>{record.method}</Badge>
-            {benGua && (
-              <span>
-                {benGua.symbol as string} {benGua.name as string}
-              </span>
-            )}
-            <span className="text-ink-dim">{formatDate(record.created_at)}</span>
-          </div>
-        </div>
-
-        {/* AI Interpretation */}
-        <div className="bg-white border border-clean-border rounded-lg p-6">
-          <h3 className="text-sm font-semibold text-ink-dim uppercase tracking-wider mb-4">
-            AI 解读
-          </h3>
-          {record.ai_interpretation ? (
-            <div className="prose prose-sm max-w-none text-ink-sec leading-relaxed">
-              {record.ai_interpretation.split("\n").map((line, i) => {
-                if (line.startsWith("【") && line.includes("】")) {
-                  return (
-                    <h4 key={i} className="text-gold-text font-semibold mt-5 mb-2 text-base">
-                      {line}
-                    </h4>
-                  )
-                }
-                return (
-                  <p key={i} className="mb-1 text-sm">
-                    {line}
-                  </p>
-                )
-              })}
-            </div>
-          ) : (
-            <p className="text-ink-dim text-sm">暂无 AI 解读内容</p>
-          )}
-        </div>
+      <div style={{background:"#fff",border:"1px solid var(--clean-border)",borderRadius:"var(--radius-lg)",padding:24}}>
+        <span style={{fontSize:11,color:"var(--gold-text)",letterSpacing:2,fontWeight:600,display:"block",marginBottom:14,opacity:0.85}}>AI 解读</span>
+        {rec.ai_interpretation?<div style={{fontSize:15,lineHeight:1.75,color:"var(--ink-sec)"}}>{rec.ai_interpretation.split("\n").map((l,i)=>l.startsWith("【")&&l.includes("】")?<h4 key={i} style={{color:"var(--gold-text)",fontWeight:700,marginTop:16,marginBottom:4,fontSize:14}}>{l}</h4>:<p key={i} style={{marginBottom:4}}>{l}</p>)}</div>:<p style={{fontSize:14,color:"var(--ink-dim)"}}>暂无 AI 解读</p>}
       </div>
     </div>
-  )
+  </div>
 }

@@ -1,189 +1,33 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "@/providers/AuthProvider"
-import { useTheme } from "@/providers/ThemeProvider"
 import { authApi } from "@/lib/api"
 
 export default function LoginPage() {
-  const navigate = useNavigate()
-  const { login, register: doRegister, isLoggedIn } = useAuthContext()
-  const { setMode } = useTheme()
-  const [mode, setMode_] = useState<"login" | "register">("login")
-  const [phone, setPhone] = useState("")
-  const [password, setPassword] = useState("")
-  const [password2, setPassword2] = useState("")
-  const [smsCode, setSmsCode] = useState("")
-  const [countdown, setCountdown] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const navigate=useNavigate();const{isLoggedIn,login,register:reg}=useAuthContext()
+  const[mode,setMode]=useState<"login"|"register">("login");const[phone,setPhone]=useState("");const[pwd,setPwd]=useState("")
+  const[pwd2,setPwd2]=useState("");const[sms,setSms]=useState("");const[cd,setCd]=useState(0);const[loading,setLoading]=useState(false);const[err,setErr]=useState<string|null>(null)
+  useEffect(()=>{if(isLoggedIn)navigate("/profile",{replace:true})},[isLoggedIn])
+  useEffect(()=>{if(cd<=0)return;const t=setTimeout(()=>setCd(c=>c-1),1000);return()=>clearTimeout(t)},[cd])
+  const sendSms=async()=>{if(phone.length!==11)return;try{await authApi.sendSms({phone});setCd(60)}catch(e:any){setErr(e.message)}}
+  const submit=async()=>{setErr(null);setLoading(true);try{if(mode==="login")await login(phone,pwd);else{if(pwd!==pwd2){setErr("两次密码不一致");setLoading(false);return};await reg(phone,pwd,sms)};navigate("/profile",{replace:true})}catch(e:any){setErr(e.message)}finally{setLoading(false)}}
+  const valid=phone.length===11&&pwd.length>=6&&(mode==="login"||(pwd===pwd2&&sms.length>=4))
 
-  useEffect(() => {
-    setMode("clean")
-    return () => setMode("clean")
-  }, [setMode])
-
-  useEffect(() => {
-    if (isLoggedIn) navigate("/profile", { replace: true })
-  }, [isLoggedIn, navigate])
-
-  useEffect(() => {
-    if (countdown <= 0) return
-    const t = setTimeout(() => setCountdown((c) => c - 1), 1000)
-    return () => clearTimeout(t)
-  }, [countdown])
-
-  const sendSms = async () => {
-    if (phone.length !== 11 || countdown > 0) return
-    try {
-      await authApi.sendSms({ phone })
-      setCountdown(60)
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "发送失败")
-    }
-  }
-
-  const handleSubmit = async () => {
-    setError(null)
-    setLoading(true)
-    try {
-      if (mode === "login") {
-        await login(phone, password)
-      } else {
-        if (password !== password2) {
-          setError("两次密码不一致")
-          setLoading(false)
-          return
-        }
-        await doRegister(phone, password, smsCode)
-      }
-      navigate("/profile", { replace: true })
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "操作失败")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const isValid =
-    phone.length === 11 && password.length >= 6 && (mode === "login" || (password === password2 && smsCode.length >= 4))
-
-  return (
-    <div className="min-h-screen bg-clean-bg flex items-center justify-center px-4">
-      <div className="w-full max-w-[400px]">
-        {/* Brand */}
-        <div className="text-center mb-8">
-          <span className="text-4xl">☯</span>
-          <h1 className="mt-2 text-2xl font-bold text-ink">爻爻</h1>
-          <p className="text-sm text-ink-sec">登录后可同步占卜记录</p>
+  return <div className="clean-bg" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh",padding:24}}>
+    <div style={{width:"100%",maxWidth:420}}>
+      <div style={{textAlign:"center",marginBottom:32}}><div className="landing-icon" style={{margin:"0 auto 16px"}}>☯</div><h1 className="landing-brand" style={{fontSize:32,letterSpacing:8}}>爻爻</h1><span className="landing-tagline">登录后可同步占卜记录</span></div>
+      <div style={{background:"#fff",border:"1px solid var(--clean-border)",borderRadius:"var(--radius-lg)",padding:32}}>
+        <div style={{display:"flex",background:"#f5f1ea",borderRadius:"var(--radius-sm)",padding:4,marginBottom:24}}>
+          {(["login","register"]as const).map(m=><button key={m} onClick={()=>setMode(m)} style={{flex:1,padding:"10px 0",border:"none",borderRadius:"var(--radius-sm)",fontSize:14,fontWeight:mode===m?600:400,color:mode===m?"var(--ink)":"var(--ink-dim)",background:mode===m?"#fff":"transparent",cursor:"pointer",fontFamily:"var(--font)",transition:"all 0.2s"}}>{m==="login"?"登录":"注册"}</button>)}
         </div>
-
-        {/* Card */}
-        <div className="bg-white border border-clean-border rounded-lg p-8 shadow-card">
-          {/* Tabs */}
-          <div className="flex bg-clean-bg/50 rounded-md p-1 mb-6">
-            {(["login", "register"] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => setMode_(m)}
-                className={`flex-1 py-2 text-sm font-medium rounded-sm transition-all ${
-                  mode === m ? "bg-white text-ink shadow-sm" : "text-ink-sec"
-                }`}
-              >
-                {m === "login" ? "登录" : "注册"}
-              </button>
-            ))}
-          </div>
-
-          {/* Phone */}
-          <div className="mb-4">
-            <label className="block text-sm text-ink-sec mb-1">手机号</label>
-            <input
-              type="tel"
-              maxLength={11}
-              className="w-full px-4 py-3 border border-clean-border rounded-md text-ink placeholder-ink-dim focus:outline-none focus:border-gold"
-              placeholder="请输入手机号"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))}
-            />
-          </div>
-
-          {/* SMS code (register) */}
-          {mode === "register" && (
-            <div className="mb-4 flex gap-3">
-              <div className="flex-1">
-                <label className="block text-sm text-ink-sec mb-1">验证码</label>
-                <input
-                  type="text"
-                  maxLength={6}
-                  className="w-full px-4 py-3 border border-clean-border rounded-md text-ink focus:outline-none focus:border-gold"
-                  placeholder="验证码"
-                  value={smsCode}
-                  onChange={(e) => setSmsCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                />
-              </div>
-              <div className="flex items-end">
-                <button
-                  onClick={sendSms}
-                  disabled={phone.length !== 11 || countdown > 0}
-                  className="px-4 py-3 text-sm text-gold-text border border-gold/30 rounded-md disabled:opacity-40 whitespace-nowrap"
-                >
-                  {countdown > 0 ? `${countdown}s` : "获取验证码"}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Password */}
-          <div className="mb-4">
-            <label className="block text-sm text-ink-sec mb-1">密码</label>
-            <input
-              type="password"
-              className="w-full px-4 py-3 border border-clean-border rounded-md text-ink focus:outline-none focus:border-gold"
-              placeholder="6-20位密码"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          {/* Confirm password (register) */}
-          {mode === "register" && (
-            <div className="mb-6">
-              <label className="block text-sm text-ink-sec mb-1">确认密码</label>
-              <input
-                type="password"
-                className="w-full px-4 py-3 border border-clean-border rounded-md text-ink focus:outline-none focus:border-gold"
-                placeholder="再次输入密码"
-                value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
-              />
-            </div>
-          )}
-
-          {/* Error */}
-          {error && (
-            <p className="mb-4 text-sm text-accent text-center">{error}</p>
-          )}
-
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={!isValid || loading}
-            className="w-full py-3 bg-accent text-white font-semibold rounded-full hover:bg-accent-hover disabled:opacity-40 transition-all shadow-cta"
-          >
-            {loading ? "处理中..." : mode === "login" ? "登录" : "注册"}
-          </button>
-
-          <p className="mt-4 text-xs text-ink-dim text-center">
-            {mode === "login" ? "还没有账号？" : "已有账号？"}
-            <button
-              onClick={() => setMode_(mode === "login" ? "register" : "login")}
-              className="text-gold-text ml-1"
-            >
-              {mode === "login" ? "立即注册" : "去登录"}
-            </button>
-          </p>
-        </div>
+        <input className="chat-input" style={{borderRadius:"var(--radius-sm)",height:48,marginBottom:12,width:"100%",background:"#f5f1ea"}} placeholder="手机号" maxLength={11} value={phone} onChange={e=>setPhone(e.target.value.replace(/\D/g,""))}/>
+        {mode==="register"&&<div style={{display:"flex",gap:8,marginBottom:12}}><input className="chat-input" style={{borderRadius:"var(--radius-sm)",height:48,flex:1,background:"#f5f1ea"}} placeholder="验证码" maxLength={6} value={sms} onChange={e=>setSms(e.target.value.replace(/\D/g,""))}/><button onClick={sendSms} disabled={phone.length!==11||cd>0} style={{padding:"0 16px",border:"1px solid var(--gold)",borderRadius:"var(--radius-sm)",background:"transparent",fontSize:13,color:"var(--gold-text)",fontWeight:500,fontFamily:"var(--font)",cursor:"pointer",opacity:phone.length!==11||cd>0?.4:1}}>{cd>0?`${cd}s`:"获取验证码"}</button></div>}
+        <input className="chat-input" style={{borderRadius:"var(--radius-sm)",height:48,marginBottom:12,width:"100%",background:"#f5f1ea"}} type="password" placeholder="密码" value={pwd} onChange={e=>setPwd(e.target.value)}/>
+        {mode==="register"&&<input className="chat-input" style={{borderRadius:"var(--radius-sm)",height:48,marginBottom:12,width:"100%",background:"#f5f1ea"}} type="password" placeholder="确认密码" value={pwd2} onChange={e=>setPwd2(e.target.value)}/>}
+        {err&&<p style={{fontSize:13,color:"var(--accent)",textAlign:"center",marginBottom:12}}>{err}</p>}
+        <button onClick={submit} disabled={!valid||loading} className="cta-btn" style={{maxWidth:"100%"}}>{loading?"处理中...":mode==="login"?"登录":"注册"}</button>
+        <p style={{fontSize:12,color:"var(--ink-dim)",textAlign:"center",marginTop:16}}>{mode==="login"?"还没有账号？":"已有账号？"}<button onClick={()=>setMode(mode==="login"?"register":"login")} style={{background:"none",border:"none",color:"var(--gold-text)",fontWeight:500,cursor:"pointer",fontFamily:"var(--font)",marginLeft:4}}>{mode==="login"?"立即注册":"去登录"}</button></p>
       </div>
     </div>
-  )
+  </div>
 }

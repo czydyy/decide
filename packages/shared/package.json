@@ -19,13 +19,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "echo ok"
   },
-  "peerDependencies": {
-    "react": "^18.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    }
+  "dependencies": {
+    "react": "^18.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
