@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "爻爻",
+    "slug": "liuyao-decide",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.liuyao.decide"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ec5930"
+      },
+      "package": "com.liuyao.decide"
+    }
+  }
+}

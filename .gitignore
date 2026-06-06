@@ -7,6 +7,18 @@ node_modules/
 
 # Build output
 frontend/dist/
+packages/web/dist/
+packages/mobile/dist/
+packages/shared/dist/
+
+# Expo
+.expo/
+packages/mobile/android/
+packages/mobile/ios/
+
+# Android SDK (local install)
+android-sdk/
+android-cmdline-tools.zip
 
 # Python
 __pycache__/
@@ -27,3 +39,8 @@ Thumbs.db
 
 # Cache
 .taro-cache/
+.turbo/
+*.tsbuildinfo
+
+# pnpm
+.pnpm-store/

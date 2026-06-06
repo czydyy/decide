@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Design Tokens — CSS Custom Properties
+   ============================================================ */
+
+:root {
+  --bg-primary: #faf8f3;
+  --bg-card: #ffffff;
+  --bg-card-hover: #faf7f0;
+  --border-color: #ebe5d8;
+  --text-primary: #1a1410;
+  --text-secondary: #6b6058;
+  --text-dim: #a09888;
+  --gold: #d4a030;
+  --gold-soft: rgba(212, 160, 48, 0.15);
+  --gold-text: #b8891e;
+  --accent: #ec5930;
+  --accent-hover: #d1441e;
+  --danger: #d43535;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+}
+
+.theme-warm {
+  --bg-primary: linear-gradient(170deg, #ec5930 0%, #dea749 40%, #f6bc4f 100%);
+  --bg-card: rgba(20, 16, 12, 0.78);
+  --bg-card-hover: rgba(20, 16, 12, 0.88);
+  --border-color: rgba(255, 255, 255, 0.07);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --gold: #f6bc4f;
+  --gold-soft: rgba(246, 188, 79, 0.15);
+  --gold-text: #f6bc4f;
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-dim);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.gradient-warm {
+  background: linear-gradient(170deg, #ec5930 0%, #dea749 40%, #f6bc4f 100%);
+}
+
+.text-gradient-warm {
+  background: linear-gradient(135deg, #ec5930, #f6bc4f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
