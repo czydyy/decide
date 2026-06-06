@@ -44,3 +44,7 @@ Thumbs.db
 
 # pnpm
 .pnpm-store/
+
+# Playwright
+.playwright-mcp/
+inst_user_settings.tmp
