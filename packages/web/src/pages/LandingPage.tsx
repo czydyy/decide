@@ -1,6 +1,10 @@
-import { useState } from "react"
+import { useState, Suspense, lazy } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "@/providers/AuthProvider"
+import { LogoHorizontal } from "@/components/ui/Logo"
+import ErrorBoundary from "@/components/ui/ErrorBoundary"
+
+const CoinTossAnimation = lazy(() => import("@/components/three/CoinTossAnimation"))
 
 const CHIPS = ["我该不该换工作？","要不要买这套房子？","这个时机创业合适吗？","这次投资能成功吗？"]
 
@@ -51,14 +55,7 @@ export default function LandingPage() {
     <div className="warm-bg">
       <div className="landing">
         <div className="landing-nav">
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <svg width="24" height="24" viewBox="0 0 42 42" fill="none">
-              <circle cx="21" cy="21" r="19" stroke="var(--ink)" strokeWidth="2" opacity="0.7"/>
-              <path d="M21 2 L21 40" stroke="var(--ink)" strokeWidth="1.5" opacity="0.3"/>
-              <circle cx="21" cy="21" r="7" fill="var(--ink)" opacity="0.6"/>
-            </svg>
-            <span style={{fontSize:18,fontWeight:700,color:"var(--ink)"}}>爻爻</span>
-          </div>
+          <LogoHorizontal />
           <div style={{display:"flex",gap:20}}>
             <button className="landing-nav-link" onClick={() => navigate("/history")}>历史记录</button>
             <button className="landing-nav-link" onClick={() => navigate(isLoggedIn?"/profile":"/login")}>
@@ -68,15 +65,19 @@ export default function LandingPage() {
         </div>
 
         <div className="landing-hero">
-          <div className="landing-icon">
-            <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
-              <circle cx="21" cy="21" r="19" stroke="var(--ink)" strokeWidth="2" opacity="0.7"/>
-              <path d="M21 2 L21 40" stroke="var(--ink)" strokeWidth="1.5" opacity="0.3"/>
-              <circle cx="21" cy="21" r="7" fill="var(--ink)" opacity="0.6"/>
-            </svg>
-          </div>
-          <h1 className="landing-brand">爻爻</h1>
+          <h1 className="landing-brand">
+            爻<span style={{color:"var(--accent-text)"}}>爻</span>
+          </h1>
           <span className="landing-tagline">两难之间，以卦明辨</span>
+
+          {/* 3D Coin Animation */}
+          <ErrorBoundary fallback={null}>
+            <Suspense fallback={<div style={{height:200}}/>}>
+              <div style={{width:"100%",maxWidth:500,margin:"0 auto"}}>
+                <CoinTossAnimation />
+              </div>
+            </Suspense>
+          </ErrorBoundary>
 
           <div className="landing-chips">
             {CHIPS.map(c => (
