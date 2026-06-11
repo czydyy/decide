@@ -11,24 +11,28 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
   background-image:radial-gradient(80% 60% at 50% 0%,rgba(102,51,238,.5) 0%,rgba(102,51,238,.1) 35%,transparent 70%);
   background-repeat:no-repeat;background-position:50% 0%;background-size:100% 1600px}
 
-.banner{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;font-size:13px;font-weight:400;background:rgb(1,3,20);border-bottom:1px solid rgba(255,255,255,.1);position:relative;z-index:101}
-.banner a{color:#a78bfa;text-decoration:none;font-weight:500}
+.announce{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;font-size:13px;font-weight:400;background:rgb(1,3,20);border-bottom:1px solid rgba(255,255,255,.1);position:relative;z-index:101}
+.announce a{color:#a78bfa;text-decoration:none;font-weight:500}
+.logo-bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 25.6px;max-width:1440px;margin:0 auto;position:relative;z-index:101;background:rgb(1,3,20)}
+.logo-bar a{font-size:12px;font-weight:500;color:#fff;text-decoration:none}
+.logo-bar .logo{font-size:16px;font-weight:600;color:#fff;text-decoration:none}
 
-.nav{position:sticky;top:0;z-index:100;background:rgba(1,3,20,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05)}
-.nav-inner{display:flex;justify-content:space-between;align-items:center;height:56px;padding:0 32px;max-width:1280px;margin:0 auto}
-.nav-logo{font-size:16px;font-weight:600;color:#fff;text-decoration:none}
-.nav-links{display:flex;align-items:center;height:56px}
-.nav-link{font-size:12px;font-weight:500;color:#fff;padding:0 12px;text-decoration:none;transition:opacity .15s;display:flex;align-items:center;height:100%}
+.nav{position:relative;top:0;z-index:100;background:transparent;padding:0}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;height:40px;padding:0 25.6px;max-width:1440px;margin:0 auto}
+.nav-logo{font-size:14px;font-weight:600;color:#fff;text-decoration:none;display:flex;align-items:center}
+.nav-links{display:flex;align-items:center;gap:4px;height:40px}
+.nav-link{font-size:12px;font-weight:500;color:#fff;padding:12px 0;margin:0 12px;text-decoration:none;transition:opacity .15s}
 .nav-link:hover{opacity:.7}
-.nav-cta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:rgb(42,43,58);background:rgba(255,255,255,.95);padding:0 16px;height:40px;border-radius:25px;text-decoration:none;margin-left:12px;transition:opacity .15s}
+.nav-cta{font-size:12px;font-weight:500;color:#fff;padding:12px 0;text-decoration:none;transition:opacity .15s;margin-left:12px}
+.nav-cta:hover{opacity:.7}
 
 /* ===== HERO ===== */
-.hero{padding:0 25.6px;margin-top:-76.8px}
-.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px}
+.hero{padding:0 25.6px;margin-top:-76.8px;min-height:800px;position:relative}
+.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px;text-align:center}
 .hero h1{font-size:56px;font-weight:600;line-height:56px;color:#fff;letter-spacing:-0.84px;margin-bottom:8px}
 .hero h2{font-size:32px;font-weight:500;line-height:40px;color:#fff;letter-spacing:-0.32px;margin-bottom:24px}
-.hero p{font-size:16px;color:#fff;line-height:28px;max-width:600px;margin-bottom:40px}
-.hero-btns{display:grid;grid-template-columns:auto auto;gap:12px;justify-content:start}
+.hero p{font-size:16px;color:#fff;line-height:28px;max-width:600px;margin:0 auto 40px}
+.hero-btns{display:grid;grid-template-columns:auto auto;gap:12px;justify-content:center}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:16px;font-weight:500;border:none;cursor:pointer;text-decoration:none;border-radius:25px;transition:opacity .2s}
 .btn:hover{opacity:.8}
 .btn-pri{padding:0 16px;height:40px;color:rgb(42,43,58);background:rgba(255,255,255,.95);position:relative}
@@ -62,7 +66,7 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
 .evc.e .br{opacity:.25}
 .evc .nt{top:196px;left:345px;width:15px;height:24px;opacity:.6}
 .evc.e .nt{opacity:.3}
-.evc .nm{top:142px;left:20px;font:18px 'Roboto Mono',monospace;color:#fff;white-space:nowrap}
+.evc .nm{top:142px;left:20px;font:18px 'Inter',sans-serif;color:#fff;white-space:nowrap;letter-spacing:.04em}
 .evc.e .nm{font-size:14px;line-height:1.3;width:340px;word-break:break-all;white-space:normal;opacity:.7}
 .evc.e .nm strong{font-weight:700;color:rgba(255,255,255,.95)}
 .evc .lb{top:189px;font:11px 'Inter',sans-serif;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em}
@@ -168,14 +172,24 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
 
 <canvas id="P"></canvas>
 
-<div class="banner">✨ We've raised a $25 million Series B. <a href="#">Learn more →</a></div>
+<!-- Announcement bar -->
+<div class="announce">✨ We've raised a $25 million Series B. <a href="#">Learn more →</a></div>
 
+<!-- Logo bar -->
+<div class="logo-bar">
+  <a href="/" class="logo">Evervault</a>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="#">Log in</a>
+    <a href="/contact">Talk to an expert</a>
+  </div>
+</div>
+
+<!-- Main nav -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/" class="nav-logo">Evervault</a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a><a href="/products" class="nav-link">Products</a><a href="/solutions" class="nav-link">Solutions</a><a href="/customers" class="nav-link">Customers</a><a href="/pricing" class="nav-link">Pricing</a><a href="#" class="nav-link">Docs</a><a href="#" class="nav-link">Resources</a><a href="#" class="nav-link">Careers</a>
-      <a href="/contact" class="nav-cta">Talk to an expert →</a>
+      <a href="/contact" class="nav-link">Talk to an expert</a>
     </div>
   </div>
 </nav>
