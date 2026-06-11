@@ -28,7 +28,7 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 
 /* ===== HERO ===== */
 .hero{padding:0 25.6px;margin-top:-76.8px;min-height:800px;position:relative}
-.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px;text-align:center}
+.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px;text-align:center;position:relative;z-index:5}
 .hero h1{font-size:56px;font-weight:600;line-height:56px;color:#fff;letter-spacing:-0.84px;margin-bottom:8px}
 .hero h2{font-size:32px;font-weight:500;line-height:40px;color:#fff;letter-spacing:-0.32px;margin-bottom:24px}
 .hero p{font-size:16px;color:#fff;line-height:28px;max-width:600px;margin:0 auto 40px}
@@ -45,24 +45,30 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 .btn-gho{padding:0 16px;height:40px;color:rgb(223,225,244);background:transparent}
 
 /* ===== TWO-MASK CARD SCROLLER (Evervault exact) ===== */
-.cards-wrap{padding-top:60px;position:relative}
+.cards-wrap{padding-top:80px;position:relative}
 .cards-wrap .clip{position:relative;width:100%;height:240px;overflow:hidden}
 /* Mask 0: decrypt cards — visible on LEFT half (with 5px center gap) */
+#card-particles{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:20;pointer-events:none}
+/* Stream background behind cards */
+.stream-bg{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.stream-bg canvas{display:block;width:100%;height:100%}
+/* Card masks */
 .cards-wrap .mask{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
 .cards-wrap .mask.m0{z-index:2;clip-path:inset(0 calc(50% - 5px) 0 0)}
 .cards-wrap .mask.m1{z-index:2;clip-path:inset(0 0 0 50%)}
 .cards-wrap .track{display:flex;gap:300px;width:max-content}
 /* Stream laser — Three.js WebGL beam, z-index 20 ABOVE cards */
-.horizon-line{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:240px;z-index:10;pointer-events:none;opacity:.72;
+.horizon{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:240px;z-index:10;pointer-events:none}
+.horizon-line{width:100%;height:100%;opacity:1;
   background:radial-gradient(1% 60%,#fff 0%,rgba(70,0,255,0) 80%),
-             radial-gradient(10% 60%,rgba(255,255,255,.82),rgba(70,0,255,.09) 20%,rgba(70,0,255,0) 100%),
-             radial-gradient(8% 50%,rgba(255,255,255,.92),rgba(70,0,255,.32) 20%,rgba(70,0,255,0) 100%)}
-.horizon-glow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:140px;height:260px;z-index:9;pointer-events:none;opacity:.6;
-  background:radial-gradient(10% 100%,rgba(255,255,255,.82),rgba(255,255,255,0) 40%),
-             radial-gradient(1% 45%,rgba(255,255,255,.92) 60%,rgba(70,0,255,0) 100%),
-             radial-gradient(10% 40%,rgba(70,0,255,.45) 50%,rgba(70,0,255,0) 100%),
-             radial-gradient(20% 50%,rgba(255,255,255,.72) 2%,rgba(100,50,230,.18) 50%,rgba(100,50,230,0) 100%),
-             radial-gradient(30% 50%,rgba(255,255,255,.92) 0%,rgba(100,50,230,.5) 10%,rgba(100,50,230,0) 100%)}
+             radial-gradient(10% 60%,#fff,rgba(70,0,255,.1) 20%,rgba(70,0,255,0) 100%),
+             radial-gradient(8% 50%,#fff,rgba(70,0,255,.4) 20%,rgba(70,0,255,0) 100%)}
+.horizon-glow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:140px;height:260px;pointer-events:none;opacity:1;
+  background:radial-gradient(10% 100%,#fff,rgba(255,255,255,0) 40%),
+             radial-gradient(1% 45%,#fff 60%,rgba(70,0,255,0) 100%),
+             radial-gradient(10% 40%,rgba(70,0,255,.6) 50%,rgba(70,0,255,0) 100%),
+             radial-gradient(20% 50%,#fff 2%,rgba(100,50,230,.2) 50%,rgba(100,50,230,0) 100%),
+             radial-gradient(30% 50%,#fff 0%,rgb(100,50,230) 10%,rgba(100,50,230,0) 100%)}
 
 /* Card */
 .evc{width:380px;height:240px;flex-shrink:0;border-radius:16px;display:inline-flex;flex-direction:row;position:relative;overflow:hidden;
@@ -237,13 +243,19 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
   <!-- TWO-MASK CARD SCROLLER -->
   <div class="cards-wrap">
     <div class="clip">
+      <!-- Flowing beam background (behind cards) -->
+      <div class="stream-bg"><canvas id="stream-canvas"></canvas></div>
       <!-- Mask 0: Decrypt cards → left half -->
       <div class="mask m0"><div class="track" id="T1"></div></div>
       <!-- Mask 1: Encrypt cards → right half -->
       <div class="mask m1"><div class="track" id="T2"></div></div>
-      <!-- Stream laser — Three.js WebGL beam -->
-      <div class="horizon-line"></div>
-      <div class="horizon-glow"></div>
+      <!-- Horizon line + glow -->
+      <div class="horizon">
+        <div class="horizon-line"></div>
+        <div class="horizon-glow"></div>
+      </div>
+      <!-- Floating particles (above cards) -->
+      <canvas id="card-particles"></canvas>
     </div>
   </div>
 </header>
@@ -403,6 +415,121 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal-visible');obs.unobserve(e.target)}});
   },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('section').forEach(s=>{s.classList.add('reveal-section');obs.observe(s)});
+})();
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.183.0/build/three.module.js"}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+// ===== 1. STREAM BEAM BACKGROUND (full width, behind cards) =====
+(function(){
+  const c=document.getElementById('stream-canvas');
+  const clip=c.parentElement.parentElement;
+  const resize=()=>{const w=clip.offsetWidth,h=clip.offsetHeight;c.width=w;c.height=h;};
+  resize();addEventListener('resize',resize);
+  const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
+  r.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  const W=()=>c.width, H=()=>c.height;
+  const scene=new THREE.Scene();
+  const cam=new THREE.OrthographicCamera(-W()/2,W()/2,H()/2,-H()/2,.1,10);
+  cam.position.z=5;
+
+  const beamMat=new THREE.ShaderMaterial({
+    transparent:true,depthWrite:false,depthTest:false,
+    uniforms:{uTime:{value:0},uRes:{value:new THREE.Vector2(W(),H())}},
+    vertexShader:`varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`varying vec2 v;uniform float uTime;uniform vec2 uRes;
+    void main(){
+      float dx=abs(v.x-.5)*uRes.x;
+      float f=exp(-dx*dx/800.)*.02;
+      f+=exp(-dx*dx/4000.)*.05;
+      f+=exp(-dx*dx/20000.)*.08;
+      f+=exp(-dx*dx/100000.)*.06;
+      float pulse=1.+.06*sin(uTime*1.5);
+      float a=f*pulse;
+      vec3 col=mix(vec3(.4,.2,.8),vec3(1.,.9,1.),smoothstep(0.,.04,f));
+      gl_FragColor=vec4(col,a);
+    }`
+  });
+  const g1=new THREE.PlaneGeometry(W(),H());
+  const m1=new THREE.Mesh(g1,beamMat);scene.add(m1);
+
+  const coreMat=new THREE.ShaderMaterial({
+    transparent:true,depthWrite:false,depthTest:false,
+    uniforms:{uTime:{value:0},uRes:{value:new THREE.Vector2(W(),H())}},
+    vertexShader:`varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`varying vec2 v;uniform float uTime;uniform vec2 uRes;
+    void main(){float dx=abs(v.x-.5)*uRes.x;float core=exp(-dx*dx/2.);gl_FragColor=vec4(1.,.95,1.,core*.9);}`
+  });
+  const g2=new THREE.PlaneGeometry(W(),H());
+  const m2=new THREE.Mesh(g2,coreMat);scene.add(m2);
+
+  function anim(t){
+    requestAnimationFrame(anim);
+    beamMat.uniforms.uTime.value=t*.001;
+    coreMat.uniforms.uTime.value=t*.001;
+    r.render(scene,cam);
+  }
+  requestAnimationFrame(anim);
+})();
+
+// ===== 2. FLOATING PARTICLES (300x300 centered, above cards) =====
+(function(){
+  const c=document.getElementById('card-particles');
+  const W=300,H=300;c.width=W;c.height=H;
+  const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
+  r.setSize(W,H);
+  const scene=new THREE.Scene();
+  const cam=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,.1,100);
+  cam.position.z=50;
+
+  const sz=64;
+  const tc=document.createElement('canvas');tc.width=tc.height=sz;
+  const ctx=tc.getContext('2d');
+  const g=ctx.createRadialGradient(32,32,0,32,32,32);
+  g.addColorStop(0,'rgba(255,245,255,1)');
+  g.addColorStop(.06,'rgba(230,200,255,.95)');
+  g.addColorStop(.2,'rgba(160,100,230,.5)');
+  g.addColorStop(.45,'rgba(90,40,180,.1)');
+  g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,sz,sz);
+  const tex=new THREE.CanvasTexture(tc);
+
+  const N=40,pos=new Float32Array(N*3),sp=[];
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-.5)*W;
+    pos[i*3+1]=(Math.random()-.5)*H;
+    pos[i*3+2]=(Math.random()-.5)*10;
+    sp.push({vx:(Math.random()-.5)*.03,vy:(Math.random()-.5)*.02,ph:Math.random()*Math.PI*2,sp:.5+.8*Math.random()});
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const mat=new THREE.PointsMaterial({
+    size:8,map:tex,blending:THREE.AdditiveBlending,
+    depthWrite:false,depthTest:false,transparent:true,opacity:.5,
+    color:new THREE.Color('#c8a0ff')
+  });
+  const pts=new THREE.Points(geo,mat);scene.add(pts);
+
+  let t=0;
+  function anim(time){
+    requestAnimationFrame(anim);t+=.002;
+    const p=geo.attributes.position.array;
+    for(let i=0;i<N;i++){
+      const s=sp[i];
+      p[i*3]+=s.vx+Math.sin(t*s.sp+s.ph)*.015;
+      p[i*3+1]+=s.vy+Math.cos(t*s.sp+s.ph)*.01;
+      if(p[i*3]<-W/2)p[i*3]=W/2;if(p[i*3]>W/2)p[i*3]=-W/2;
+      if(p[i*3+1]<-H/2)p[i*3+1]=H/2;if(p[i*3+1]>H/2)p[i*3+1]=-H/2;
+    }
+    geo.attributes.position.needsUpdate=true;
+    r.render(scene,cam);
+  }
+  requestAnimationFrame(anim);
 })();
 </script>
 </body>
