@@ -46,12 +46,14 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
 .cards-wrap .clip{position:relative;width:110%;margin-left:-5%;height:260px}
 /* Mask 0: decrypt cards — visible on LEFT half (with 5px center gap) */
 .cards-wrap .mask{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
-.cards-wrap .mask.m0{z-index:2;clip-path:inset(0 calc(50% - 3px) 0 0)}
+.cards-wrap .mask.m0{z-index:2;clip-path:inset(0 calc(50% - 5px) 0 0)}
 .cards-wrap .mask.m1{z-index:2;clip-path:inset(0 0 0 50%)}
 .cards-wrap .track{display:flex;gap:300px;width:max-content;will-change:transform;padding:10px 0}
 /* Stream laser — Three.js WebGL beam, z-index 20 ABOVE cards */
-.stream-p{position:absolute;top:0;left:0;width:100%;height:260px;z-index:20;pointer-events:none}
+.stream-p{position:absolute;top:0;left:0;width:100%;height:260px;z-index:15;pointer-events:none}
 #stream-laser{width:100%;height:100%;display:block}
+.horizon-line{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:260px;z-index:10;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(120,80,240,.04) 30%,rgba(160,100,255,.08) 50%,rgba(120,80,240,.04) 70%,transparent 100%)}
 
 /* Card */
 .evc{width:380px;height:240px;flex-shrink:0;border-radius:16px;display:inline-flex;flex-direction:row;position:relative;overflow:hidden;
@@ -213,6 +215,7 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
       <!-- Mask 1: Encrypt cards → right half -->
       <div class="mask m1"><div class="track" id="T2"></div></div>
       <!-- Stream laser — Three.js WebGL beam -->
+      <div class="horizon-line"></div>
       <div class="stream-p"><canvas id="stream-laser"></canvas></div>
     </div>
   </div>
