@@ -358,19 +358,19 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
     const j=i%7;
     d+=`<div class="evc d">${br}${nt}<div class="ch"></div><span class="nm">${N[j]}</span><span class="lb l1">Card Holder</span><span class="vl v1">${M[j]}</span><span class="lb l2">Expiry</span><span class="vl v2">${D[j]}</span></div>`;
   }
-  const t1=document.getElementById('T1');t1.innerHTML=d;
+  const t1=document.getElementById('T1');t1.innerHTML=d+d+d;
 
-  // Build encrypt cards (layer 2)
   let e='';
   for(let i=0;i<21;i++){
     const j=i%7;
     e+=`<div class="evc e">${br}${nt}<div class="ch"></div><span class="nm">${E[j]}</span><span class="lb l1">DATA MASKED</span><span class="vl v1">****</span><span class="lb l2">Encrypted</span><span class="vl v2">****</span></div>`;
   }
-  const t2=document.getElementById('T2');t2.innerHTML=e;
+  const t2=document.getElementById('T2');t2.innerHTML=e+e+e;
 
-  // Seamless loop: track scrolls left-to-right at ~48px/s
-  const SET=21*380+20*300; // 13,980px
-  let x=-SET;
+  // Seamless loop: cards scroll left-to-right at ~48px/s; 21*680px per set
+  const SET=21*380+20*300;
+  // Beam at 1/3 of a card (pos 127 ≈ 380/3); compensate ~3 rAF frames (2.4px)
+  let x=-13714;
   function A(){
     x+=.8;if(x>=0)x-=SET;
     t1.style.transform=t2.style.transform=`translateX(${x}px)`;
