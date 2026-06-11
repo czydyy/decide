@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evervault — Flexible Payments Security</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden;
+  background-image:radial-gradient(80% 60% at 50% 0%,rgba(102,51,238,.5) 0%,rgba(102,51,238,.1) 35%,transparent 70%);
+  background-repeat:no-repeat;background-position:50% 0%;background-size:100% 1600px}
+
+.banner{display:flex;align-items:center;justify-content:center;gap:8px;height:50px;font-size:13px;font-weight:400;background:rgb(1,3,20);border-bottom:1px solid rgba(255,255,255,.1);position:relative;z-index:101}
+.banner a{color:#a78bfa;text-decoration:none;font-weight:500}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(1,3,20,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;height:56px;padding:0 32px;max-width:1280px;margin:0 auto}
+.nav-logo{font-size:16px;font-weight:600;color:#fff;text-decoration:none}
+.nav-links{display:flex;align-items:center;height:56px}
+.nav-link{font-size:12px;font-weight:500;color:#fff;padding:0 12px;text-decoration:none;transition:opacity .15s;display:flex;align-items:center;height:100%}
+.nav-link:hover{opacity:.7}
+.nav-cta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:rgb(42,43,58);background:rgba(255,255,255,.95);padding:0 16px;height:40px;border-radius:25px;text-decoration:none;margin-left:12px;transition:opacity .15s}
+
+/* ===== HERO ===== */
+.hero{padding:0 25.6px;margin-top:-76.8px}
+.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px}
+.hero h1{font-size:56px;font-weight:600;line-height:56px;color:#fff;letter-spacing:-0.84px;margin-bottom:8px}
+.hero h2{font-size:32px;font-weight:500;line-height:40px;color:#fff;letter-spacing:-0.32px;margin-bottom:24px}
+.hero p{font-size:16px;color:#fff;line-height:28px;max-width:600px;margin-bottom:40px}
+.hero-btns{display:grid;grid-template-columns:auto auto;gap:12px;justify-content:start}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;font-size:16px;font-weight:500;border:none;cursor:pointer;text-decoration:none;border-radius:25px;transition:opacity .2s}
+.btn:hover{opacity:.8}
+.btn-pri{padding:0 16px;height:40px;color:rgb(42,43,58);background:rgba(255,255,255,.95);position:relative}
+.btn-pri::before,.btn-pri::after{content:'';position:absolute;inset:-4px;border-radius:29px;border:1.5px solid rgba(255,255,255,.25);animation:ring 6s ease infinite;pointer-events:none}
+.btn-pri::after{animation-delay:1.2s}
+@keyframes ring{0%{inset:-4px;opacity:.6;border-width:1.5px}100%{inset:-28px;opacity:0;border-width:.5px}}
+.btn-gho{padding:0 16px;height:40px;color:#fff;background:transparent}
+
+/* ===== TWO-MASK CARD SCROLLER (Evervault exact) ===== */
+.cards-wrap{padding-top:128px;position:relative}
+.cards-wrap .clip{position:relative;width:110%;margin-left:-5%;height:260px}
+/* Mask 0: decrypt cards — visible on LEFT half (with 5px center gap) */
+.cards-wrap .mask{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
+.cards-wrap .mask.m0{z-index:2;clip-path:inset(0 calc(50% - 3px) 0 0)}
+.cards-wrap .mask.m1{z-index:2;clip-path:inset(0 0 0 50%)}
+.cards-wrap .track{display:flex;gap:300px;width:max-content;will-change:transform;padding:10px 0}
+/* Stream laser — Three.js WebGL beam, z-index 20 ABOVE cards */
+.stream-p{position:absolute;top:0;left:0;width:100%;height:260px;z-index:20;pointer-events:none}
+#stream-laser{width:100%;height:100%;display:block}
+
+/* Card */
+.evc{width:380px;height:240px;flex-shrink:0;border-radius:16px;display:inline-flex;flex-direction:row;position:relative;overflow:hidden;
+  box-shadow:rgba(255,255,255,.2) 0 1px 0 0 inset,rgba(0,0,0,.12) 0 -1px 24px 0 inset,rgba(0,0,0,.08) 0 0 16px 0 inset,rgba(0,0,0,.2) 0 0 0 1px,rgba(0,0,0,.2) 0 1px 2px 0,rgba(0,0,0,.2) 0 2px 4px 0}
+.evc.d{background:linear-gradient(155.85deg,rgb(102,51,238) -3.09%,rgb(165,132,255) 94.41%)}
+.evc.e{background:rgb(42,43,58)}
+.evc>*{position:absolute}
+.evc .ch{top:20px;left:20px;width:41px;height:33px;border-radius:8px;
+  background:linear-gradient(142.66deg,rgb(255,246,238) -9.14%,rgb(255,250,231) 27.29%,rgb(228,255,237) 63.05%,rgb(212,214,255) 96.78%,rgb(255,212,248) 125.78%)}
+.evc.e .ch{background:linear-gradient(142.66deg,rgba(255,246,238,.35),rgba(255,250,231,.3),rgba(228,255,237,.25),rgba(212,214,255,.2),rgba(255,212,248,.15))}
+.evc .br{top:-8px;left:284px;width:80px;height:80px;opacity:.5}
+.evc.e .br{opacity:.25}
+.evc .nt{top:196px;left:345px;width:15px;height:24px;opacity:.6}
+.evc.e .nt{opacity:.3}
+.evc .nm{top:142px;left:20px;font:18px 'Roboto Mono',monospace;color:#fff;white-space:nowrap}
+.evc.e .nm{font-size:14px;line-height:1.3;width:340px;word-break:break-all;white-space:normal;opacity:.7}
+.evc.e .nm strong{font-weight:700;color:rgba(255,255,255,.95)}
+.evc .lb{top:189px;font:11px 'Inter',sans-serif;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em}
+.evc .lb.l1{left:20px}.evc .lb.l2{left:200px}
+.evc .vl{top:205px;font:15px 'Inter',sans-serif;color:#fff}
+.evc .vl.v1{left:20px}.evc .vl.v2{left:200px}
+.evc.e .lb{opacity:.35}.evc.e .vl{opacity:.4}
+
+/* ===== LOGOS ===== */
+.logos{padding:100px 0 80px;text-align:center;border-bottom:1px solid rgba(255,255,255,.04)}
+.logos h4{font-size:17.6px;font-weight:500;color:#fff;line-height:22.88px;margin-bottom:40px}
+.logos-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:48px;max-width:1100px;margin:0 auto}
+.logos-row span{font-size:18px;font-weight:600;color:rgba(223,225,244,.22)}
+
+.sec-inner{max-width:1200px;margin:0 auto;padding:0 32px}
+
+/* ===== BENTO ===== */
+.bento{padding:120px 0}
+.bento-header{margin-bottom:64px}
+.bento-header h2{font-size:52px;font-weight:500;line-height:52px;color:#fff;letter-spacing:-1.04px;max-width:800px}
+.bento-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.bc{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:32px;transition:all .2s;cursor:pointer}
+.bc:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
+.bc .bl{font-size:12.8px;font-weight:500;color:rgb(184,140,255);line-height:12.8px;margin-bottom:16px}
+.bc h3{font-size:24px;font-weight:500;color:#fff;line-height:30px;margin-bottom:12px}
+.bc p{font-size:14.4px;color:rgb(223,225,244);line-height:1.6}
+
+/* ===== TOKENIZATION ===== */
+.token{padding:120px 0;text-align:center}
+.token h2{font-size:52px;font-weight:500;line-height:52px;color:#fff;letter-spacing:-1.04px;max-width:900px;margin:0 auto 80px}
+
+/* ===== SECURE ===== */
+.secure{padding:120px 0}
+.secure-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.secure-left .sl{font-size:14px;font-weight:500;color:rgb(184,140,255);margin-bottom:16px}
+.secure-left h2{font-size:52px;font-weight:500;line-height:52px;color:#fff;letter-spacing:-1.3px;margin-bottom:24px}
+.secure-left>p{font-size:15.2px;color:rgb(223,225,244);line-height:1.7}
+.secure-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.si{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;transition:all .2s;cursor:pointer}
+.si:hover{background:rgba(255,255,255,.03)}
+.si h3{font-size:16px;font-weight:500;color:#fff;line-height:20px;margin-bottom:8px}
+.si p{font-size:13.6px;color:rgb(186,188,210);line-height:1.5}
+
+/* ===== DEV ===== */
+.dev{padding:120px 0;border-top:1px solid rgba(255,255,255,.04)}
+.dev-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.dev-left .dl{font-size:14.4px;font-weight:500;color:rgba(255,255,255,.8);line-height:18.72px;margin-bottom:16px}
+.dev-left h2{font-size:48px;font-weight:500;line-height:54px;color:#fff;letter-spacing:-0.48px;margin-bottom:24px}
+.dev-left>p{font-size:15.2px;color:rgb(223,225,244);line-height:1.7}
+.dev-code{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:28px;font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(223,225,244,.7);line-height:1.8;overflow-x:auto}
+.kw{color:#a78bfa}.str{color:rgba(165,132,255,.8)}.fn{color:#fff}.cm{color:rgba(223,225,244,.3)}
+
+/* ===== PRIMITIVES ===== */
+.prims{padding:120px 0}
+.prims-header{text-align:center;margin-bottom:64px}
+.prims-header .pl{font-size:14px;font-weight:500;color:rgb(184,140,255);text-transform:uppercase;margin-bottom:16px}
+.prims-header h2{font-size:52px;font-weight:500;color:#fff;line-height:52px;letter-spacing:-1.04px}
+.prim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.06);margin-bottom:60px}
+.pc{background:rgba(255,255,255,.015);padding:32px 24px;transition:all .2s;cursor:pointer}
+.pc:hover{background:rgba(255,255,255,.04)}
+.pc h4{font-size:16px;font-weight:500;color:#fff;line-height:16px;margin-bottom:12px}
+.pc p{font-size:13.6px;color:rgb(223,225,244);line-height:1.6}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.fi{background:rgba(255,255,255,.015);padding:28px 24px;transition:all .2s;cursor:pointer}
+.fi:hover{background:rgba(255,255,255,.04)}
+.fi h3{font-size:24px;font-weight:500;color:#fff;line-height:30px;margin-bottom:8px}
+.fi p{font-size:14.4px;color:rgb(223,225,244);line-height:1.6}
+
+/* ===== TRUST ===== */
+.trust{padding:120px 0;border-top:1px solid rgba(255,255,255,.04);text-align:center}
+.trust h2{font-size:52px;font-weight:500;color:#fff;line-height:52px;letter-spacing:-1.04px;margin-bottom:60px}
+.trust blockquote{font-size:24px;font-weight:500;color:#fff;line-height:1.5;max-width:700px;margin:0 auto 20px}
+.trust cite{font-size:14px;color:rgba(223,225,244,.45);font-style:normal}
+
+/* ===== CTA ===== */
+.cta-sec{padding:140px 0;text-align:center}
+.cta-sec h2{font-size:52px;font-weight:500;color:#fff;line-height:52px;letter-spacing:-1.04px;max-width:900px;margin:0 auto 40px}
+.cta-sec .btn{font-size:18px;padding:0 28px;height:52px}
+
+/* ===== FOOTER ===== */
+.footer{padding:80px 32px 40px;border-top:1px solid rgba(255,255,255,.04)}
+.ft-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:60px;max-width:1200px;margin:0 auto}
+.ft-brand .nav-logo{margin-bottom:12px;display:block}
+.ft-brand p{font-size:14px;color:rgba(223,225,244,.4);line-height:1.6;max-width:280px}
+.ft-links{display:flex;gap:80px;flex-wrap:wrap}
+.ft-col h5{font-size:13px;font-weight:600;color:#fff;margin-bottom:16px}
+.ft-col a{display:block;font-size:13px;color:rgba(223,225,244,.4);text-decoration:none;margin-bottom:10px;transition:color .15s}
+.ft-col a:hover{color:#dfe1f4}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.04);padding:24px 0 0;margin-top:60px;max-width:1200px;margin-left:auto;margin-right:auto;display:flex;justify-content:space-between;font-size:12.8px;color:rgb(186,188,210)}
+
+/* Particles */
+#P{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.5}
+
+@media(max-width:900px){
+  .hero h1{font-size:36px}.hero h2{font-size:22px}
+  .bento-grid,.secure-layout,.dev-layout{grid-template-columns:1fr}
+  .prim-grid{grid-template-columns:repeat(2,1fr)}.feat-grid{grid-template-columns:1fr}
+  .nav-link{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="P"></canvas>
+
+<div class="banner">✨ We've raised a $25 million Series B. <a href="#">Learn more →</a></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Evervault</a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a><a href="/products" class="nav-link">Products</a><a href="/solutions" class="nav-link">Solutions</a><a href="/customers" class="nav-link">Customers</a><a href="/pricing" class="nav-link">Pricing</a><a href="#" class="nav-link">Docs</a><a href="#" class="nav-link">Resources</a><a href="#" class="nav-link">Careers</a>
+      <a href="/contact" class="nav-cta">Talk to an expert →</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Flexible Payments Security</h1>
+    <h2>Maximum protection, minimum compliance burden</h2>
+    <p>Take control of your payments stack — easily tokenize cards, optimize margins, comply with PCI, avoid gateway lock-in, or spin-up card issuing programs.</p>
+    <div class="hero-btns">
+      <a href="/contact" class="btn btn-pri">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M5 12h13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
+      <a href="#" class="btn btn-gho">Get Started</a>
+    </div>
+  </div>
+
+  <!-- TWO-MASK CARD SCROLLER -->
+  <div class="cards-wrap">
+    <div class="clip">
+      <!-- Mask 0: Decrypt cards → left half -->
+      <div class="mask m0"><div class="track" id="T1"></div></div>
+      <!-- Mask 1: Encrypt cards → right half -->
+      <div class="mask m1"><div class="track" id="T2"></div></div>
+      <!-- Stream laser — Three.js WebGL beam -->
+      <div class="stream-p"><canvas id="stream-laser"></canvas></div>
+    </div>
+  </div>
+</header>
+
+<section class="logos">
+  <h4>Global leaders trust Evervault to secure their most sensitive payment data</h4>
+  <div class="logos-row"><span>Rippling</span><span>Cartrawler</span><span>Sorare</span><span>Uniswap</span><span>Ramp</span><span>Modern Treasury</span><span>Stitch</span><span>Overwolf</span></div>
+</section>
+
+<section class="bento"><div class="sec-inner">
+  <div class="bento-header"><h2>Accelerate your business with a first-class payments stack</h2></div>
+  <div class="bento-grid">
+    <div>
+      <div class="bc"><div class="bl">Accelerate your card product</div><h3>Expedite the security and compliance requirements of launching a card product</h3><p>Improve your card's time-to-market from months to days, by using Evervault to tokenize card data before it touches your infrastructure. Evervault allows you to avoid building and maintaining complex compliance architecture.</p></div>
+      <div class="bc" style="margin-top:32px"><div class="bl">Build complex card sharing workflows</div><h3>Share card data securely while keeping compliance scope to a minimum</h3><p>Evervault gives you flexible, compliant products for sharing card data with third parties or within your own organization — giving you full control over how card data is distributed between entities.</p></div>
+    </div>
+    <div style="margin-top:40px">
+      <div class="bc"><div class="bl">Optimize pay-in performance</div><h3>Improve payment costs &amp; global coverage with a multi-processor payment setup</h3><p>Avoid payment processor vendor lock-in, optimize payment costs and acceptance rates by adding multiple payment processors to your payments stack with just a few clicks.</p></div>
+      <div class="bc" style="margin-top:32px"><div class="bl">Computing for highly sensitive payment operations</div><h3>Easily prove to enterprise customers that their data is handled with maximum security</h3><p>Evervault makes it easy for developers to run sensitive payment workloads in highly restricted environments, using Secure Enclaves — Evervault's confidential computing environment.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="token"><h2>Tokenization, but with a powerful and flexible encryption model</h2></section>
+
+<section class="secure"><div class="sec-inner">
+  <div class="secure-layout">
+    <div class="secure-left"><div class="sl">Agile payments infrastructure</div><h2>We secure it,<br>You own it</h2><p>Our flexible solutions are designed to adapt to your, and your customers' unique business needs. Evervault provides a fully customizable platform that fits seamlessly into your payments stack.</p></div>
+    <div class="secure-grid">
+      <div class="si"><h3>Infinitely Customizable</h3><p>UI Components has full CSS-in-JS support, as well as three base themes to get you started — or build a fully custom theme.</p></div>
+      <div class="si"><h3>Cross-platform</h3><p>Evervault lets you implement payment flows across mobile, web, and APIs.</p></div>
+      <div class="si"><h3>Plug and Play</h3><p>Use Evervault with any number of third-party payment gateways, card issuers, or banks with minimal integration effort.</p></div>
+      <div class="si"><h3>Effortlessly Scalable</h3><p>Every product auto-scales to process millions of transactions per day without affecting performance.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="dev"><div class="sec-inner">
+  <div class="dev-layout">
+    <div class="dev-left"><div class="dl">Built for Developers</div><h2>Powered by an easy-to-use, developer friendly platform</h2><p>Evervault was built to save developer time and make securing data incredibly easy. Start building in minutes using the Evervault Dashboard, or interact with Primitives through our SDKs or REST API.</p></div>
+    <div class="dev-code"><span class="cm">// Checkout.jsx</span><br><span class="kw">import</span> { Card, themes } <span class="kw">from</span> <span class="str">"@evervault/ui"</span>;<br><br><span class="kw">export const</span> <span class="fn">Checkout</span> = () => (<br>&nbsp;&nbsp;&lt;<span class="fn">Card</span> <span class="kw">theme</span>={<span class="fn">themes</span>.<span class="fn">dark</span>}<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">onReady</span>{() => <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">'ready'</span>)}<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">onChange</span>={(data) => <span class="fn">tokenize</span>(data)} /&gt;<br>);</div>
+  </div>
+</div></section>
+
+<section class="prims"><div class="sec-inner">
+  <div class="prims-header"><div class="pl">Products</div><h2>Everything you need to secure payments</h2></div>
+  <div class="prim-grid">
+    <div class="pc"><h4>Relay</h4><p>An encryption proxy which can be configured to encrypt or decrypt data within a request at the edge.</p></div>
+    <div class="pc"><h4>Functions</h4><p>Secure serverless functions that allow you to run logic on encrypted data outside of your enclave.</p></div>
+    <div class="pc"><h4>UI Components</h4><p>Embeddable components for collecting and displaying cardholder data without touching your server.</p></div>
+    <div class="pc"><h4>Enclaves</h4><p>Deploy any Docker Container to a Secure Enclave with no additional configuring or third-party setup.</p></div>
+  </div>
+  <div class="feat-grid">
+    <div class="fi"><h3>SDKs and REST API</h3><p>Use language-specific SDKs or our REST API to integrate Evervault seamlessly.</p></div>
+    <div class="fi"><h3>Usage Logs</h3><p>Get full visibility into how your Primitives are being used.</p></div>
+    <div class="fi"><h3>Alerting</h3><p>Configure alerts on Primitives to notify you when specific events occur.</p></div>
+    <div class="fi"><h3>Data Policies</h3><p>Set clear rules that dictate how and when encrypted data can be decrypted.</p></div>
+    <div class="fi"><h3>Audit Logging</h3><p>Keep track of all user activity within your Evervault Team.</p></div>
+    <div class="fi"><h3>Access Control</h3><p>Control which members of your team can access and modify Primitives.</p></div>
+  </div>
+</div></section>
+
+<section class="trust">
+  <h2>Why Trust Us?</h2>
+  <blockquote>"Evervault is the rare company that is a pleasure to work with. They combine deep technical expertise with transparency and reliability. Our experience with Evervault has been exceptional across the board."</blockquote>
+  <cite>— CEO, Leading Payments Platform</cite>
+</section>
+
+<section class="cta-sec">
+  <h2>Enhance customer experience and maximize revenue with your payments.</h2>
+  <a href="/contact" class="btn btn-pri">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M5 12h13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
+</section>
+
+<footer class="footer">
+  <div class="ft-grid">
+    <div class="ft-brand"><a href="/" class="nav-logo">Evervault</a><p>Flexible payments security.</p></div>
+    <div class="ft-links">
+      <div class="ft-col"><h5>Products</h5><a href="#">Tokenization</a><a href="#">Card Issuing</a><a href="#">Network Tokens</a><a href="#">Relay</a><a href="#">Functions</a></div>
+      <div class="ft-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#">Contact</a></div>
+      <div class="ft-col"><h5>Resources</h5><a href="#">Documentation</a><a href="#">API Reference</a><a href="#">Guides</a><a href="#">Status</a></div>
+    </div>
+  </div>
+  <div class="ft-bottom"><span>© 2026 Evervault Inc. All rights reserved.</span><span>All systems normal</span></div>
+</footer>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.183.0/build/three.module.js"}}
+</script>
+
+<script type="module">
+// ===== THREE.JS STREAM LASER =====
+import * as THREE from 'three';
+
+const container=document.getElementById('stream-laser');
+const W=container.clientWidth,H=container.clientHeight;
+
+const renderer=new THREE.WebGLRenderer({canvas:container,alpha:true,antialias:true});
+renderer.setSize(W,H,false);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+const scene=new THREE.Scene();
+const camera=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,.1,10);
+camera.position.z=5;
+
+// Create shader material for the beam
+const beamMat=new THREE.ShaderMaterial({
+  transparent:true,
+  depthWrite:false,
+  depthTest:false,
+  uniforms:{
+    uTime:{value:0},
+    uResolution:{value:new THREE.Vector2(W,H)},
+  },
+  vertexShader:/*glsl*/`
+    varying vec2 vUv;
+    void main(){
+      vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
+    }`,
+  fragmentShader:/*glsl*/`
+    varying vec2 vUv;
+    uniform float uTime;
+    uniform vec2 uResolution;
+    void main(){
+      float dx=abs(vUv.x-.5)*uResolution.x;
+      float falloff=exp(-dx*dx/800.)*.02;
+      falloff+=exp(-dx*dx/4000.)*.04;
+      falloff+=exp(-dx*dx/20000.)*.06;
+      falloff+=exp(-dx*dx/100000.)*.04;
+      float pulse=1.+.06*sin(uTime*1.5);
+      float alpha=falloff*pulse;
+      vec3 color=mix(vec3(.4,.2,.8),vec3(1.,.9,1.),smoothstep(0.,.04,falloff));
+      gl_FragColor=vec4(color,alpha);
+    }`
+});
+
+const geo=new THREE.PlaneGeometry(W,H);
+const beam=new THREE.Mesh(geo,beamMat);
+scene.add(beam);
+
+// Also add a very thin bright line
+const lineMat=new THREE.ShaderMaterial({
+  transparent:true,
+  depthWrite:false,
+  depthTest:false,
+  uniforms:{
+    uTime:{value:0},
+    uResolution:{value:new THREE.Vector2(W,H)},
+  },
+  vertexShader:/*glsl*/`
+    varying vec2 vUv;
+    void main(){
+      vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
+    }`,
+  fragmentShader:/*glsl*/`
+    varying vec2 vUv;
+    uniform float uTime;
+    uniform vec2 uResolution;
+    void main(){
+      float dx=abs(vUv.x-.5)*uResolution.x;
+      float core=exp(-dx*dx/2.);
+      float alpha=core*.9;
+      gl_FragColor=vec4(1.,1.,1.,alpha);
+    }`
+});
+const lineGeo=new THREE.PlaneGeometry(W,H);
+const line=new THREE.Mesh(lineGeo,lineMat);
+scene.add(line);
+
+function animate(time){
+  requestAnimationFrame(animate);
+  beamMat.uniforms.uTime.value=time*.001;
+  lineMat.uniforms.uTime.value=time*.001;
+  renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+
+window.addEventListener('resize',()=>{
+  const w=container.clientWidth,h=container.clientHeight;
+  renderer.setSize(w,h,false);
+  beamMat.uniforms.uResolution.value.set(w,h);
+  lineMat.uniforms.uResolution.value.set(w,h);
+  geo.dispose();lineGeo.dispose();
+  const g=new THREE.PlaneGeometry(w,h);
+  beam.geometry=g;
+  line.geometry=g.clone();
+});
+</script>
+
+<script>
+// ===== DUAL-LAYER CARD SCROLLER =====
+(function(){
+  const N=['4242 4242 4242 4242','5319 7501 0000 0000','5577 0000 5577 0004','4311 1111 1111 1111','4111 1111 1111 1111','5319 7501 0000 0000'];
+  const M=['Martha Jones','Jeremy Wagemans','Chris Smith','Frank Peters','Emma Johnson','Ben Miller'];
+  const E=[
+    '%EVEN<b>CNQA5G</b>9VWMHY6ASRTJY<b>S</b>XDHP8EWUWU$EZ$HN68$91NVGH5GW9#AQ<b>0</b>L7E=SQ+FLS5R4#SY4+0J43E2GB4DVHO#MCBR8WLBHHVFS3HM43<b>P</b>LT81ITX4L641T#EM+9P5RHLCH=YW+FQ',
+    '%EVEN<b>C2A!4T706=V!</b>T=1B$UO!G+TUHNELUO1YY=#EIF<b>J</b>RL1V878XB1M#K=18CJB59=HG6J28=XF#9NUU5PP9$<b>+</b>97BE1R++<b>I</b>!79DV6BB1N2P+3O!8X$38NLT=2A#XZ',
+    '%EVEN<b>CNL8WK5CR1ADN3DB13KX0R#5ALLEHB</b>M<b>Z</b>3EPN<b>=J5</b>$I0R#EZO226AWHG9AAY0G=A3VO5=R<b>XO</b>0BAN8SI0P51Q8UKR<b>#</b>CJD<b>H</b>LH9QP8QZ4ASM!GF+B7HBK9OVPCY5ACWV9G',
+    '%EVEN<b>C4M0T+6BCQYFDYBCXRZPX1A7R</b>L$1=8=$TU7QD!KCXU<b>C</b>TJ50KG!7B5CMEUO9LQWHH<b>P</b>C##U#R2Q1M83ZENLM4<b>9</b>YK<b>K</b>MAQ9WW=L9LD3A23M98=2T#$TM5I<b>0</b>42',
+    '%EVEN<b>CHCT1KBZ6T+X+!+$UBGP</b>T49OV7PH0TU$4T=8AK6GY<b>A</b>0OKOW=NRVDPOYFUZ+KGEDP297FR0$H33<b>0</b>H=SN#LD=YHHPS26SWETL6BRXQ<b>F</b>1ZMVZMQGIS93G!U6E<b>+</b>I40YHFF',
+    '%EVEN<b>SILM27J91QX#CSF9HG6EVQ48!</b>=LS0X30VI9SMB4O60NNQA=TD2CCJWNOODT7ZI0LI<b>S</b>V8UPK5O37VCC+1GFX6M=1=U$821MK4F8SS<b>J</b>U5OU=8BH7DO!!TK2TUUW27H',
+  ];
+  const br='<svg class="br" viewBox="0 0 80 80"><circle cx="30" cy="40" r="20" fill="rgba(255,255,255,.4)"/><circle cx="50" cy="40" r="20" fill="rgba(255,255,255,.25)"/></svg>';
+  const nt='<svg class="nt" viewBox="0 0 15 24"><rect width="15" height="24" rx="3" fill="rgba(255,255,255,.25)"/><rect x="3" y="4" width="9" height="16" rx="2" fill="rgba(255,255,255,.15)"/></svg>';
+
+  // Build decrypt cards (layer 1)
+  let d='';
+  for(let i=0;i<21;i++){
+    const j=i%6;
+    d+=`<div class="evc d">${br}${nt}<div class="ch"></div><span class="nm">${N[j]}</span><span class="lb l1">Card Holder</span><span class="vl v1">${M[j]}</span><span class="lb l2">Expiry</span><span class="vl v2">12/29</span></div>`;
+  }
+  const t1=document.getElementById('T1');t1.innerHTML=d+d;
+
+  // Build encrypt cards (layer 2)
+  let e='';
+  for(let i=0;i<21;i++){
+    const j=i%6;
+    e+=`<div class="evc e">${br}${nt}<div class="ch"></div><span class="nm">${E[j]}</span><span class="lb l1">DATA MASKED</span><span class="vl v1">****</span><span class="lb l2">Encrypted</span><span class="vl v2">****</span></div>`;
+  }
+  const t2=document.getElementById('T2');t2.innerHTML=e+e;
+
+  // Seamless loop: track is duplicated, scroll left-to-right at 48px/s
+  const SET=21*380+20*300; // 13,980px
+  let x=-SET;
+  function A(){
+    x+=.8;if(x>=0)x-=SET;
+    t1.style.transform=t2.style.transform=`translateX(${x}px)`;
+    requestAnimationFrame(A);
+  }
+  A();
+})();
+
+
+// ===== BACKGROUND PARTICLES =====
+(function(){
+  const c=document.getElementById('P'),x=c.getContext('2d');
+  let W=innerWidth||1440,H=innerHeight||900;c.width=W;c.height=H;
+  addEventListener('resize',()=>{W=innerWidth;H=innerHeight;c.width=W;c.height=H});
+  const p=[];for(let i=0;i<120;i++)p.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.06,vy:(Math.random()-.5)*.06,r:Math.random()*1.5+.3,g:Math.random()*12+5,a:Math.random()*.25+.05,ph:Math.random()*Math.PI*2});
+  let t=0;function A(){x.clearRect(0,0,W,H);t+=.002;
+    for(const d of p){d.x+=d.vx+Math.sin(t+d.ph)*.02;d.y+=d.vy+Math.cos(t+d.ph)*.02;if(d.x<0)d.x=W;if(d.x>W)d.x=0;if(d.y<0)d.y=H;if(d.y>H)d.y=0;
+      const g=x.createRadialGradient(d.x,d.y,0,d.x,d.y,d.g);g.addColorStop(0,`rgba(200,180,255,${d.a})`);g.addColorStop(.35,`rgba(102,51,238,${d.a*.6})`);g.addColorStop(1,'rgba(102,51,238,0)');
+      x.fillStyle=g;x.fillRect(d.x-d.g,d.y-d.g,d.g*2,d.g*2);x.beginPath();x.arc(d.x,d.y,d.r,0,Math.PI*2);x.fillStyle=`rgba(200,180,255,${d.a*1.8})`;x.fill();}
+    requestAnimationFrame(A);}A();
+})();
+</script>
+</body>
+</html>

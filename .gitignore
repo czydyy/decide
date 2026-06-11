@@ -48,3 +48,11 @@ Thumbs.db
 # Playwright
 .playwright-mcp/
 inst_user_settings.tmp
+
+# Screenshots & debug outputs (root only)
+/*.png
+/*.yml
+
+# Reference / temp HTML
+packages/web/public/evervault-source.html
+packages/web/public/card-reveal-demo.html
