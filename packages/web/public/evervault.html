@@ -412,9 +412,6 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 </script>
 <script type="module">
 import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // Particles background behind cards (z:1)
 (function(){
@@ -423,24 +420,45 @@ const resize=()=>{c.width=clip.offsetWidth;c.height=clip.offsetHeight;};
 resize();addEventListener('resize',resize);
 const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
 r.setClearColor(0x000000,0);
+r.toneMapping = THREE.NoToneMapping;
 r.setPixelRatio(Math.min(devicePixelRatio,2));
 const W=()=>c.width,H=()=>c.height;
 const scene=new THREE.Scene();
 const cam=new THREE.OrthographicCamera(-W()/2,W()/2,H()/2,-H()/2,.1,10);cam.position.z=5;
 
-const composer=new EffectComposer(r);
-composer.addPass(new RenderPass(scene,cam));
-const bloomPass=new UnrealBloomPass(new THREE.Vector2(W(),H()),1,.4,.85);
-bloomPass.threshold=.15;bloomPass.strength=1;bloomPass.radius=.5;
-composer.addPass(bloomPass);
+// Soft glow texture for ambient particles
+const tex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.02,'rgba(255,250,255,1)');g.addColorStop(.08,'rgba(220,180,255,.8)');g.addColorStop(.2,'rgba(140,80,220,.25)');g.addColorStop(.5,'rgba(60,20,140,.03)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
 
-const bgTex=(()=>{const t=document.createElement('canvas');t.width=t.height=32;const x=t.getContext('2d');const g=x.createRadialGradient(16,16,0,16,16,16);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.06,'rgba(255,240,255,.95)');g.addColorStop(.2,'rgba(220,170,255,.5)');g.addColorStop(.4,'rgba(140,80,220,.1)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,32,32);return new THREE.CanvasTexture(t);})();
-const bgN=2000,bgPos=new Float32Array(bgN*3),bgCol=new Float32Array(bgN*3),bgSize=new Float32Array(bgN),bgVel=[];
-for(let i=0;i<bgN;i++){bgPos[i*3]=(Math.random()-.5)*W();bgPos[i*3+1]=(Math.random()-.5)*H();bgPos[i*3+2]=0;const r=Math.random();if(r<.4){bgCol[i*3]=1.5;bgCol[i*3+1]=1.4+Math.random()*.1;bgCol[i*3+2]=1.45+Math.random()*.05}else if(r<.7){bgCol[i*3]=4;bgCol[i*3+1]=4;bgCol[i*3+2]=4}else if(r<.9){bgCol[i*3]=8;bgCol[i*3+1]=8;bgCol[i*3+2]=8}else{bgCol[i*3]=.8+Math.random()*.4;bgCol[i*3+1]=.3+Math.random()*.5;bgCol[i*3+2]=.9+Math.random()*.2}bgSize[i]=.8+Math.random()*2.5;bgVel.push({vx:.3+Math.random()*2.5,vy:(Math.random()-.5)*.3,ph:Math.random()*Math.PI*2});}
-const bgGeo=new THREE.BufferGeometry();bgGeo.setAttribute('position',new THREE.BufferAttribute(bgPos,3));bgGeo.setAttribute('color',new THREE.BufferAttribute(bgCol,3));bgGeo.setAttribute('size',new THREE.BufferAttribute(bgSize,1));
-const bgMat=new THREE.PointsMaterial({size:4,map:bgTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:.9,vertexColors:true});
-const bgPts=new THREE.Points(bgGeo,bgMat);scene.add(bgPts);
-let t=0;function anim(time){requestAnimationFrame(anim);t+=.002;bloomPass.strength=1+.06*Math.sin(time*.0015);const arr=bgGeo.attributes.position.array;for(let i=0;i<bgN;i++){const v=bgVel[i];arr[i*3]+=v.vx+Math.sin(t+v.ph)*.01;arr[i*3+1]+=v.vy+Math.cos(t+v.ph)*.008;if(arr[i*3]>W()/2)arr[i*3]=-W()/2;if(arr[i*3]<-W()/2)arr[i*3]=W()/2;if(arr[i*3+1]<-H()/2)arr[i*3+1]=H()/2;if(arr[i*3+1]>H()/2)arr[i*3+1]=-H()/2;}bgGeo.attributes.position.needsUpdate=true;composer.render();}
+// Ultra-tight pure-white flash texture
+const flashTex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.003,'rgba(255,255,255,1)');g.addColorStop(.015,'rgba(255,255,255,.7)');g.addColorStop(.05,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
+
+// --- Ambient particles (2000) ---
+const N=2000,pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[];
+for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*W();pos[i*3+1]=(Math.random()-.5)*H();pos[i*3+2]=0;const rnd=Math.random();if(rnd<.3){col[i*3]=1.8+Math.random()*.5;col[i*3+1]=1.5+Math.random()*.3;col[i*3+2]=2.2+Math.random()*.5}else if(rnd<.55){col[i*3]=3.2+Math.random()*1.2;col[i*3+1]=2.6+Math.random()*.9;col[i*3+2]=3.8+Math.random()*.9}else if(rnd<.8){col[i*3]=.9+Math.random()*.6;col[i*3+1]=.4+Math.random()*.5;col[i*3+2]=1.2+Math.random()*.6}else{col[i*3]=.5+Math.random()*.3;col[i*3+1]=.25+Math.random()*.2;col[i*3+2]=.75+Math.random()*.3}vel.push({vx:.15+Math.random()*1.8,vy:(Math.random()-.5)*.2,ph:Math.random()*Math.PI*2,sp:.25+Math.random()*.6});}
+const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+const mat=new THREE.PointsMaterial({size:8,map:tex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:.9,vertexColors:true,sizeAttenuation:true,toneMapped:false});
+scene.add(new THREE.Points(geo,mat));
+
+// --- Flash particles (180) — pure white, sharp, blinding ---
+const BN=180,bPos=new Float32Array(BN*3),bVel=[];
+for(let i=0;i<BN;i++){bPos[i*3]=(Math.random()-.5)*W();bPos[i*3+1]=(Math.random()-.5)*H();bPos[i*3+2]=0;bVel.push({vx:.08+Math.random()*.9,vy:(Math.random()-.5)*.12,ph:Math.random()*Math.PI*2,sp:.15+Math.random()*.4});}
+const bGeo=new THREE.BufferGeometry();bGeo.setAttribute('position',new THREE.BufferAttribute(bPos,3));
+const bMat=new THREE.PointsMaterial({size:12,map:flashTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:0xffffff,sizeAttenuation:true,toneMapped:false});
+scene.add(new THREE.Points(bGeo,bMat));
+
+let t=0;function anim(time){requestAnimationFrame(anim);t+=.0015;
+
+// Animate ambient particles
+const arr=geo.attributes.position.array;
+for(let i=0;i<N;i++){const v=vel[i];arr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.015;arr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.01;if(arr[i*3]>W()/2)arr[i*3]=-W()/2;if(arr[i*3]<-W()/2)arr[i*3]=W()/2;if(arr[i*3+1]<-H()/2)arr[i*3+1]=H()/2;if(arr[i*3+1]>H()/2)arr[i*3+1]=-H()/2;}
+geo.attributes.position.needsUpdate=true;
+
+// Animate flash particles
+const bArr=bGeo.attributes.position.array;
+for(let i=0;i<BN;i++){const v=bVel[i];bArr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.02;bArr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.015;if(bArr[i*3]>W()/2)bArr[i*3]=-W()/2;if(bArr[i*3]<-W()/2)bArr[i*3]=W()/2;if(bArr[i*3+1]<-H()/2)bArr[i*3+1]=H()/2;if(bArr[i*3+1]>H()/2)bArr[i*3+1]=-H()/2;}
+bGeo.attributes.position.needsUpdate=true;
+
+r.render(scene,cam);}
 requestAnimationFrame(anim);
 })();
 
