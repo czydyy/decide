@@ -56,8 +56,8 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 .cards-wrap .mask.m0{z-index:2;clip-path:inset(0 calc(50% - 5px) 0 0)}
 .cards-wrap .mask.m1{z-index:2;clip-path:inset(0 0 0 50%)}
 .cards-wrap .track{display:flex;gap:300px;width:max-content}
-#beam-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
-#fg-particles{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:20;pointer-events:none}
+#beam-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background:transparent}
+#fg-particles{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:20;pointer-events:none;background:transparent}
 /* Stream laser — Three.js WebGL beam, z-index 20 ABOVE cards */
 .horizon-line{position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:240px;z-index:10;pointer-events:none;opacity:.72;
   background:radial-gradient(1% 60%,#fff 0%,rgba(70,0,255,0) 80%),
@@ -252,8 +252,6 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
         <div class="mask m0"><div class="track" id="T1"></div></div>
         <div class="mask m1"><div class="track" id="T2"></div></div>
         <canvas id="fg-particles"></canvas>
-        <div class="horizon-line"></div>
-        <div class="horizon-glow"></div>
       </div>
       </div>
     </div>
@@ -432,8 +430,8 @@ const c=document.getElementById('beam-bg'),clip=c.parentElement;
 const resize=()=>{c.width=clip.offsetWidth;c.height=clip.offsetHeight;};
 resize();addEventListener('resize',resize);
 const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
+r.setClearColor(0x000000,0);
 r.setPixelRatio(Math.min(devicePixelRatio,2));
-r.toneMapping=THREE.ReinhardToneMapping;
 const W=()=>c.width,H=()=>c.height;
 const scene=new THREE.Scene();
 const cam=new THREE.OrthographicCamera(-W()/2,W()/2,H()/2,-H()/2,.1,10);cam.position.z=5;
@@ -462,7 +460,7 @@ requestAnimationFrame(anim);
 // LAYER 2: center particles above cards (z:20, 300x300)
 (function(){
 const c=document.getElementById('fg-particles');const W=300,H=300;c.width=W;c.height=H;
-const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(W,H);
+const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setClearColor(0x000000,0);r.setSize(W,H);
 const scene=new THREE.Scene();const cam=new THREE.OrthographicCamera(-W/2,W/2,H/2,-H/2,.1,100);cam.position.z=50;
 const tex=(()=>{const t=document.createElement('canvas');t.width=t.height=32;const x=t.getContext('2d');const g=x.createRadialGradient(16,16,0,16,16,16);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.06,'rgba(255,240,255,.95)');g.addColorStop(.2,'rgba(220,170,255,.5)');g.addColorStop(.4,'rgba(140,80,220,.1)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,32,32);return new THREE.CanvasTexture(t);})();
 const N=200,pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[];
