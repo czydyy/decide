@@ -27,8 +27,12 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 .nav-cta:hover{opacity:.7}
 
 /* ===== HERO ===== */
-.hero{padding:0 25.6px;margin-top:-76.8px;min-height:800px;position:relative}
-.hero-inner{max-width:1200px;margin:0 auto;padding-top:180px;text-align:center;position:relative;z-index:5}
+.hero{padding:0 25.6px;margin-top:-76.8px;height:calc(100vh - 32px);min-height:800px;position:relative}
+/* Gradient wrapper — matches Evervault's GradientHero__gradient */
+.hero-gradient{border-radius:38.4px;background:radial-gradient(140% 107.13% at 50% 10%,transparent 37.41%,rgb(102,51,238) 69.27%,rgb(255,255,255) 100%);display:grid;position:relative;overflow:hidden;min-height:800px;height:100%}
+/* Content layer — z-index 1, text at bottom */
+.hero-content-layer{z-index:1;display:flex;align-items:flex-end;justify-content:center;width:100%;position:relative}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 32px 96px;text-align:center;position:relative;z-index:5}
 .hero h1{font-size:56px;font-weight:600;line-height:56px;color:#fff;letter-spacing:-0.84px;margin-bottom:8px}
 .hero h2{font-size:32px;font-weight:500;line-height:40px;color:#fff;letter-spacing:-0.32px;margin-bottom:24px}
 .hero p{font-size:16px;color:#fff;line-height:28px;max-width:600px;margin:0 auto 40px}
@@ -44,8 +48,9 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
   background-size:256px 256px;animation:evervault-flicker .15s steps(1) infinite}
 .btn-gho{padding:0 16px;height:40px;color:rgb(223,225,244);background:transparent}
 
-/* ===== TWO-MASK CARD SCROLLER (Evervault exact) ===== */
-.cards-wrap{padding-top:80px;position:relative}
+/* ===== TWO-MASK CARD SCROLLER ===== */
+.cards-wrap{position:absolute;inset:0;z-index:0;display:flex;align-items:flex-start;justify-content:center}
+.cards-wrap .inner{width:100%;margin-top:12%}
 .cards-wrap .clip{position:relative;width:100%;height:240px;overflow:hidden}
 /* Mask 0: decrypt cards — visible on LEFT half (with 5px center gap) */
 #card-particles{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:20;pointer-events:none}
@@ -229,33 +234,35 @@ body{background:rgb(1,3,20);color:rgb(223,225,244);overflow-x:hidden}
 </nav>
 
 <header class="hero">
-  <canvas id="P"></canvas>
-  <div class="hero-inner">
-    <h1>Flexible Payments Security</h1>
-    <h2>Maximum protection, minimum compliance burden</h2>
-    <p>Take control of your payments stack — easily tokenize cards, optimize margins, comply with PCI, avoid gateway lock-in, or spin-up card issuing programs.</p>
-    <div class="hero-btns">
-      <a href="/contact" class="btn btn-pri">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M5 12h13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
-      <a href="#" class="btn btn-gho">Get Started</a>
-    </div>
-  </div>
-
-  <!-- TWO-MASK CARD SCROLLER -->
-  <div class="cards-wrap">
-    <div class="clip">
-      <!-- Flowing beam background (behind cards) -->
-      <div class="stream-bg"><canvas id="stream-canvas"></canvas></div>
-      <!-- Mask 0: Decrypt cards → left half -->
-      <div class="mask m0"><div class="track" id="T1"></div></div>
-      <!-- Mask 1: Encrypt cards → right half -->
-      <div class="mask m1"><div class="track" id="T2"></div></div>
-      <!-- Horizon line + glow -->
-      <div class="horizon">
-        <div class="horizon-line"></div>
-        <div class="horizon-glow"></div>
+  <div class="hero-gradient">
+    <!-- Content layer (z:1) -->
+    <div class="hero-content-layer">
+      <canvas id="P"></canvas>
+      <div class="hero-inner">
+        <h1>Flexible Payments Security</h1>
+        <h2>Maximum protection, minimum compliance burden</h2>
+        <p>Take control of your payments stack — easily tokenize cards, optimize margins, comply with PCI, avoid gateway lock-in, or spin-up card issuing programs.</p>
+        <div class="hero-btns">
+          <a href="/contact" class="btn btn-pri">Talk to an Expert <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M5 12h13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></a>
+          <a href="#" class="btn btn-gho">Get Started</a>
+        </div>
       </div>
-      <!-- Floating particles (above cards) -->
-      <canvas id="card-particles"></canvas>
+    </div>
+
+    <!-- Background layer — card scroller -->
+    <div class="cards-wrap">
+      <div class="inner">
+      <div class="clip">
+        <div class="stream-bg"><canvas id="stream-canvas"></canvas></div>
+        <div class="mask m0"><div class="track" id="T1"></div></div>
+        <div class="mask m1"><div class="track" id="T2"></div></div>
+        <div class="horizon">
+          <div class="horizon-line"></div>
+          <div class="horizon-glow"></div>
+        </div>
+        <canvas id="card-particles"></canvas>
+      </div>
+      </div>
     </div>
   </div>
 </header>
