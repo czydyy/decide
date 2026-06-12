@@ -49,9 +49,18 @@ Thumbs.db
 .playwright-mcp/
 inst_user_settings.tmp
 
-# Screenshots & debug outputs (root only)
-/*.png
-/*.yml
+# Screenshots, videos & debug outputs
+*.png
+*.webm
+*.yml
+!**/public/*.yml
+!packages/mobile/assets/*.png
+
+# Analysis & temp scripts
+analysis.md
+visual-diff*.mjs
+frame-compare.mjs
+record-compare.mjs
 
 # Reference / temp HTML
 packages/web/public/evervault-source.html
