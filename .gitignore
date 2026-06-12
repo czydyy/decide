@@ -61,6 +61,14 @@ analysis.md
 visual-diff*.mjs
 frame-compare.mjs
 record-compare.mjs
+analyze_css.mjs
+analyze_pages.mjs
+check_remote.mjs
+compare_screenshots.mjs
+debug_cards.mjs
+verify_beam.mjs
+verify_final.mjs
+verify_fix.mjs
 
 # Reference / temp HTML
 packages/web/public/evervault-source.html
