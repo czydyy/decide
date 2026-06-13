@@ -418,50 +418,58 @@ import * as THREE from 'three';
 const c=document.getElementById('beam-bg'),clip=c.parentElement;
 const resize=()=>{c.width=clip.offsetWidth;c.height=clip.offsetHeight;};
 resize();addEventListener('resize',resize);
-const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
-r.setClearColor(0x000000,0);
-r.toneMapping = THREE.NoToneMapping;
-r.setPixelRatio(Math.min(devicePixelRatio,2));
+const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true,premultipliedAlpha:false});
+r.setClearColor(0x000000,0);r.setPixelRatio(Math.min(devicePixelRatio,2));
 const W=()=>c.width,H=()=>c.height;
 const scene=new THREE.Scene();
 const cam=new THREE.OrthographicCamera(-W()/2,W()/2,H()/2,-H()/2,.1,10);cam.position.z=5;
 
-// Soft glow texture for ambient particles
-const tex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.02,'rgba(255,250,255,1)');g.addColorStop(.08,'rgba(220,180,255,.8)');g.addColorStop(.2,'rgba(140,80,220,.25)');g.addColorStop(.5,'rgba(60,20,140,.03)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
+const tex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.01,'rgba(255,255,255,1)');g.addColorStop(.04,'rgba(220,180,255,.7)');g.addColorStop(.12,'rgba(100,50,200,.12)');g.addColorStop(.3,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
 
-// Ultra-tight pure-white flash texture
-const flashTex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.003,'rgba(255,255,255,1)');g.addColorStop(.015,'rgba(255,255,255,.7)');g.addColorStop(.05,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
+// Tighter glow for flash — visible but not bloomy
+const flashTex=(()=>{const t=document.createElement('canvas');t.width=t.height=64;const x=t.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.005,'rgba(255,255,255,1)');g.addColorStop(.02,'rgba(240,220,255,.7)');g.addColorStop(.06,'rgba(160,100,230,.2)');g.addColorStop(.14,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(t);})();
 
-// --- Ambient particles (2000) ---
-const N=2000,pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[];
-for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*W();pos[i*3+1]=(Math.random()-.5)*H();pos[i*3+2]=0;const rnd=Math.random();if(rnd<.3){col[i*3]=1.8+Math.random()*.5;col[i*3+1]=1.5+Math.random()*.3;col[i*3+2]=2.2+Math.random()*.5}else if(rnd<.55){col[i*3]=3.2+Math.random()*1.2;col[i*3+1]=2.6+Math.random()*.9;col[i*3+2]=3.8+Math.random()*.9}else if(rnd<.8){col[i*3]=.9+Math.random()*.6;col[i*3+1]=.4+Math.random()*.5;col[i*3+2]=1.2+Math.random()*.6}else{col[i*3]=.5+Math.random()*.3;col[i*3+1]=.25+Math.random()*.2;col[i*3+2]=.75+Math.random()*.3}vel.push({vx:.15+Math.random()*1.8,vy:(Math.random()-.5)*.2,ph:Math.random()*Math.PI*2,sp:.25+Math.random()*.6});}
-const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-const mat=new THREE.PointsMaterial({size:8,map:tex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:.9,vertexColors:true,sizeAttenuation:true,toneMapped:false});
+// Ambient (1800) — small uniform white dots
+const N=1400,pos=new Float32Array(N*3),vel=[];
+for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*W();pos[i*3+1]=(Math.random()-.5)*H();pos[i*3+2]=0;vel.push({vx:1.5+Math.random()*7,vy:(Math.random()-.5)*1.2,ph:Math.random()*Math.PI*2,sp:.4+Math.random()*.8});}
+const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+const mat=new THREE.PointsMaterial({size:18,map:tex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:new THREE.Color(1,1,1),sizeAttenuation:false});
 scene.add(new THREE.Points(geo,mat));
+ // Tiny white (400) — small sharp white
+	const WN=400,wPos=new Float32Array(WN*3),wVel=[];
+	for(let i=0;i<WN;i++){wPos[i*3]=(Math.random()-.5)*W();wPos[i*3+1]=(Math.random()-.5)*H();wPos[i*3+2]=0;wVel.push({vx:1+Math.random()*6,vy:(Math.random()-.5)*1.5,ph:Math.random()*Math.PI*2,sp:.3+Math.random()*.7});}
+	const wGeo=new THREE.BufferGeometry();wGeo.setAttribute('position',new THREE.BufferAttribute(wPos,3));
+	const wMat=new THREE.PointsMaterial({size:25,map:flashTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:new THREE.Color(1,1,1),sizeAttenuation:false});
+	scene.add(new THREE.Points(wGeo,wMat));
 
-// --- Flash particles (180) — pure white, sharp, blinding ---
-const BN=180,bPos=new Float32Array(BN*3),bVel=[];
-for(let i=0;i<BN;i++){bPos[i*3]=(Math.random()-.5)*W();bPos[i*3+1]=(Math.random()-.5)*H();bPos[i*3+2]=0;bVel.push({vx:.08+Math.random()*.9,vy:(Math.random()-.5)*.12,ph:Math.random()*Math.PI*2,sp:.15+Math.random()*.4});}
-const bGeo=new THREE.BufferGeometry();bGeo.setAttribute('position',new THREE.BufferAttribute(bPos,3));
-const bMat=new THREE.PointsMaterial({size:12,map:flashTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:0xffffff,sizeAttenuation:true,toneMapped:false});
-scene.add(new THREE.Points(bGeo,bMat));
+
+// Bright purple (100) — mid-size, vivid purple
+const PN=400,pPos=new Float32Array(PN*3),pVel=[];
+for(let i=0;i<PN;i++){pPos[i*3]=(Math.random()-.5)*W();pPos[i*3+1]=(Math.random()-.5)*H();pPos[i*3+2]=0;pVel.push({vx:1+Math.random()*5,vy:(Math.random()-.5)*1.2,ph:Math.random()*Math.PI*2,sp:.2+Math.random()*.5});}
+const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+const pMat=new THREE.PointsMaterial({size:45,map:flashTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:new THREE.Color(0.35,0.05,1),sizeAttenuation:false});
+scene.add(new THREE.Points(pGeo,pMat));
+
+// Flash (200) — bright medium white dots
+const FN=600,fPos=new Float32Array(FN*3),fVel=[];
+for(let i=0;i<FN;i++){fPos[i*3]=(Math.random()-.5)*W();fPos[i*3+1]=(Math.random()-.5)*H();fPos[i*3+2]=0;fVel.push({vx:0.8+Math.random()*4,vy:(Math.random()-.5)*1,ph:Math.random()*Math.PI*2,sp:.15+Math.random()*.5});}
+const fGeo=new THREE.BufferGeometry();fGeo.setAttribute('position',new THREE.BufferAttribute(fPos,3));
+const fMat=new THREE.PointsMaterial({size:45,map:flashTex,blending:THREE.AdditiveBlending,depthWrite:false,depthTest:false,transparent:true,opacity:1,color:new THREE.Color(1,1,1),sizeAttenuation:false});
+scene.add(new THREE.Points(fGeo,fMat));
 
 let t=0;function anim(time){requestAnimationFrame(anim);t+=.0015;
-
-// Animate ambient particles
 const arr=geo.attributes.position.array;
-for(let i=0;i<N;i++){const v=vel[i];arr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.015;arr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.01;if(arr[i*3]>W()/2)arr[i*3]=-W()/2;if(arr[i*3]<-W()/2)arr[i*3]=W()/2;if(arr[i*3+1]<-H()/2)arr[i*3+1]=H()/2;if(arr[i*3+1]>H()/2)arr[i*3+1]=-H()/2;}
-geo.attributes.position.needsUpdate=true;
+for(let i=0;i<N;i++){const v=vel[i];arr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.015;arr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.01;if(arr[i*3]>W()/2)arr[i*3]=-W()/2;if(arr[i*3]<-W()/2)arr[i*3]=W()/2;if(arr[i*3+1]<-H()/2)arr[i*3+1]=H()/2;if(arr[i*3+1]>H()/2)arr[i*3+1]=-H()/2;}geo.attributes.position.needsUpdate=true;
+const bArr=fGeo.attributes.position.array;
+for(let i=0;i<FN;i++){const v=fVel[i];bArr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.02;bArr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.015;if(bArr[i*3]>W()/2)bArr[i*3]=-W()/2;if(bArr[i*3]<-W()/2)bArr[i*3]=W()/2;if(bArr[i*3+1]<-H()/2)bArr[i*3+1]=H()/2;if(bArr[i*3+1]>H()/2)bArr[i*3+1]=-H()/2;}fGeo.attributes.position.needsUpdate=true;
+const wArr=wGeo.attributes.position.array;
+	for(let i=0;i<WN;i++){const v=wVel[i];wArr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.016;wArr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.011;if(wArr[i*3]>W()/2)wArr[i*3]=-W()/2;if(wArr[i*3]<-W()/2)wArr[i*3]=W()/2;if(wArr[i*3+1]<-H()/2)wArr[i*3+1]=H()/2;if(wArr[i*3+1]>H()/2)wArr[i*3+1]=-H()/2;}wGeo.attributes.position.needsUpdate=true;
 
-// Animate flash particles
-const bArr=bGeo.attributes.position.array;
-for(let i=0;i<BN;i++){const v=bVel[i];bArr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.02;bArr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.015;if(bArr[i*3]>W()/2)bArr[i*3]=-W()/2;if(bArr[i*3]<-W()/2)bArr[i*3]=W()/2;if(bArr[i*3+1]<-H()/2)bArr[i*3+1]=H()/2;if(bArr[i*3+1]>H()/2)bArr[i*3+1]=-H()/2;}
-bGeo.attributes.position.needsUpdate=true;
-
+const pArr=pGeo.attributes.position.array;
+for(let i=0;i<PN;i++){const v=pVel[i];pArr[i*3]+=v.vx+Math.sin(t*v.sp+v.ph)*.018;pArr[i*3+1]+=v.vy+Math.cos(t*v.sp+v.ph)*.012;if(pArr[i*3]>W()/2)pArr[i*3]=-W()/2;if(pArr[i*3]<-W()/2)pArr[i*3]=W()/2;if(pArr[i*3+1]<-H()/2)pArr[i*3+1]=H()/2;if(pArr[i*3+1]>H()/2)pArr[i*3+1]=-H()/2;}pGeo.attributes.position.needsUpdate=true;
 r.render(scene,cam);}
 requestAnimationFrame(anim);
 })();
-
 </script>
 
 <script>
